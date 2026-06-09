@@ -16,6 +16,7 @@ After first deploy: **Workers & Pages → project-starfly-fabrics → Domains** 
 ## Local
 
 ```bash
+./scripts/build-docs-site.sh   # after editing docs/*.md
 npm install
 npx wrangler deploy
 ```
