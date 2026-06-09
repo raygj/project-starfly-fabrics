@@ -1,0 +1,33 @@
+---
+title: Starfly documentation
+description: Tutorials, concepts, integrators, and API reference for the Starfly
+  identity fabric.
+slug: 1.0/docs
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Welcome to Starfly v1 documentation.
+
+<CardGrid>
+  <Card title="Getting started" icon="rocket">
+    [First exchange in 15 minutes](/1.0/docs/getting-started/)
+  </Card>
+
+  <Card title="Playground" icon="laptop">
+    [Interactive sandbox](/1.0/play/)
+  </Card>
+
+  <Card title="Terraform" icon="setting">
+    [FIAM-as-code provider](/1.0/terraform/)
+  </Card>
+
+  <Card title="API reference" icon="document">
+    [OpenAPI](/1.0/api/)
+  </Card>
+</CardGrid>
+
+## Sacred invariants
+
+1. **124ns exchange hot path** — no new synchronous dependencies on the exchange pipeline.
+2. **30ms revocation kill switch** — propagation latency is not negotiable.

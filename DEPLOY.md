@@ -1,26 +1,43 @@
 # Deploy — Cloudflare Workers
 
-Operator runbook for hosting **starfly.dev** from this repository.
+Operator runbook for **starfly.dev**.
 
-## Dashboard
+## Architecture
 
-| Field | Value |
-|---|---|
-| Repository | `raygj/project-starfly-fabrics` |
-| Project name | `project-starfly-fabrics` (matches `name` in `wrangler.jsonc`) |
-| Build command | *(empty)* |
-| Deploy command | `npm install && npx wrangler deploy` |
+| Piece | Path | Output |
+|-------|------|--------|
+| Starlight docs | `docs-site/` | `docs-site/dist/` (Pagefind search, v1.0, OpenAPI, Terraform subsite) |
+| Landing + play | `docs-site/public/` | Copied to dist root on build |
+| Wrangler | `wrangler.jsonc` | Serves `docs-site/dist/` |
 
-After first deploy: **Workers & Pages → project-starfly-fabrics → Domains** → add `starfly.dev`.
-
-## Local
+## Deploy
 
 ```bash
-./scripts/build-docs-site.sh   # after editing docs/*.md
-npm install
-npx wrangler deploy
+npm install                 # wrangler at repo root
+cd docs-site && npm ci && cd ..
+npm run deploy              # build Starlight + wrangler deploy
 ```
+
+Custom domain: **Workers & Pages → project-starfly-fabrics → Domains** → `starfly.dev`.
+
+## Maintainer exports (private monorepo)
+
+```bash
+# Starfly service slice
+communes/starfly/scripts/export-public-min.sh
+rsync -a /tmp/export-starfly-min/ /path/to/project-starfly-fabrics/ --exclude LICENSE
+
+# Terraform provider
+communes/starfly/scripts/export-terraform-provider.sh
+# writes to DEST=/path/to/project-starfly-fabrics/terraform-provider
+```
+
+Then update docs in `docs-site/src/content/docs/` if needed, commit, `npm run deploy`.
+
+## Versioning
+
+Docs use [starlight-versions](https://starlight-versions.vercel.app/). v1.0 is archived at `/1.0/…`. Current editable docs live at `/docs/…` until the next version is cut.
 
 ## DNS
 
-`starfly.dev` and `starflyfabrics.com` → `starfly.dev` redirect are managed via Cloudflare (Terraform or dashboard). This repo only ships the Worker assets.
+`starfly.dev` and `starflyfabrics.com` redirect — Cloudflare Terraform or dashboard. This repo ships Worker assets only.

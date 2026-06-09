@@ -1,0 +1,6 @@
+# Legacy markdown viewer paths → Starlight v1.0
+/docs/getting-started/   /1.0/docs/getting-started/   301
+/docs/glossary/          /1.0/docs/glossary/          301
+/docs/concepts/:path*    /1.0/docs/concepts/:path*    301
+/docs/integrators/:path* /1.0/docs/integrators/:path* 301
+/docs/                   /1.0/docs/                   301

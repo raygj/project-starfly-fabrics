@@ -1,0 +1,52 @@
+# Home lab (Talos + local registry) — not for production.
+replicaCount: 1
+
+image:
+  repository: 192.168.1.32:32500/starfly
+  tag: "dev"
+  pullPolicy: Always
+
+starfly:
+  lock:
+    type: dev
+  logLevel: info
+  logFormat: json
+  policy:
+    bundlePath: /etc/starfly/policies/
+  nats:
+    embedded: true
+    jetstream:
+      storageDir: /data/starfly/nats
+
+operator:
+  enabled: true
+  embedded: true
+  standalone: false
+  leaderElection:
+    enabled: false
+
+persistence:
+  enabled: true
+  storageClass: local-path
+  size: 5Gi
+  accessMode: ReadWriteOnce
+  fixVolumePermissions: true
+  # Talos home-lab: SC uses kubernetes.io/no-provisioner — create manual PV first.
+  # See docs/operator-pressure/persistence-playbook.md
+
+networkPolicy:
+  enabled: false
+
+prometheus:
+  rules:
+    enabled: false
+
+grafana:
+  dashboards:
+    enabled: false
+
+# Single-node Talos control plane
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule

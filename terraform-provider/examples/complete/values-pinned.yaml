@@ -1,0 +1,27 @@
+# Pinned Helm values — do not use floating tags.
+replicaCount: 3
+
+image:
+  repository: starfly
+  tag: "0.4.0"
+  pullPolicy: IfNotPresent
+
+starfly:
+  lock:
+    type: dev
+  logLevel: info
+  logFormat: json
+  policy:
+    bundlePath: /etc/starfly/policies/
+  nats:
+    embedded: true
+
+operator:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+networkPolicy:
+  enabled: true

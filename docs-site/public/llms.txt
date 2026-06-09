@@ -1,0 +1,42 @@
+# Starfly — machine-readable doc index
+# https://starfly.dev/llms.txt
+
+> Starfly is a non-human identity broker. RFC 8693 token exchange, WIMSE JWTs, OPA policy, CAEP revocation, MCP tool verification, federation sync.
+
+## Site
+
+- https://starfly.dev — product home
+- https://starfly.dev/1.0/docs/ — documentation v1.0 (Starlight + Pagefind search)
+- https://starfly.dev/terraform/ — Terraform provider subsite
+- https://starfly.dev/api/ — OpenAPI reference (generated)
+- https://starfly.dev/play/ — sandbox playground
+
+## Repository
+
+- https://github.com/raygj/project-starfly-fabrics — public source (service, provider, docs, website)
+
+## Agent bootstrap
+
+- AGENTS.md — Cursor/Claude agents read first
+- sandbox/manifest.yaml — profiles and five use cases
+- sandbox/run.sh — proof scripts
+
+## Documentation v1.0
+
+- /1.0/docs/getting-started/ — clone, build, dev mode, first exchange
+- /1.0/docs/glossary/ — trust domain vs audience
+- /1.0/docs/concepts/exchange/ — 124ns hot path invariant
+- /1.0/docs/concepts/revocation/ — 30ms kill switch invariant
+- /1.0/docs/integrators/token-exchange/ — RFC 8693 integrator guide
+- /1.0/docs/integrators/mcp/ — MCP confused deputy mitigation
+
+## Terraform provider
+
+- /terraform/quickstart/ — build provider from terraform-provider/
+- /terraform/resources/ — starfly_fabric, mcp_tool, ssf_stream, agent_identity, encryption_key
+- /terraform/auth/ — mTLS and JWT migration
+
+## Invariants
+
+- 124ns exchange hot path — no new synchronous deps on exchange pipeline
+- 30ms revocation kill switch — propagation latency not negotiable

@@ -1,0 +1,81 @@
+{
+  "sidebar": [
+    {
+      "label": "Start",
+      "items": [
+        {
+          "label": "Documentation hub",
+          "slug": "docs"
+        },
+        {
+          "label": "Getting started",
+          "slug": "docs/getting-started"
+        },
+        {
+          "label": "Playground",
+          "link": "/play/"
+        }
+      ]
+    },
+    {
+      "label": "Explanation",
+      "items": [
+        {
+          "label": "Glossary",
+          "slug": "docs/glossary"
+        },
+        {
+          "label": "Trust domains",
+          "slug": "docs/concepts/trust-domains"
+        },
+        {
+          "label": "Exchange",
+          "slug": "docs/concepts/exchange"
+        },
+        {
+          "label": "Revocation",
+          "slug": "docs/concepts/revocation"
+        }
+      ]
+    },
+    {
+      "label": "Integrators",
+      "items": [
+        {
+          "label": "Token exchange",
+          "slug": "docs/integrators/token-exchange"
+        },
+        {
+          "label": "MCP security",
+          "slug": "docs/integrators/mcp"
+        }
+      ]
+    },
+    {
+      "label": "Terraform",
+      "items": [
+        {
+          "label": "Overview",
+          "slug": "terraform"
+        },
+        {
+          "label": "Quick start",
+          "slug": "terraform/quickstart"
+        },
+        {
+          "label": "Resources",
+          "slug": "terraform/resources"
+        },
+        {
+          "label": "Authentication",
+          "slug": "terraform/auth"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "items": [],
+      "label": "Symbol(StarlightOpenAPISidebarGroupsLabel)"
+    }
+  ]
+}

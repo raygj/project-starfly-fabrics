@@ -2,7 +2,11 @@
   "name": "project-starfly-fabrics",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy"
+    "build": "npm run build --prefix docs-site",
+    "dev:docs": "npm run dev --prefix docs-site",
+    "deploy": "npm run build && wrangler deploy",
+    "test:go": "go test ./pkg/...",
+    "test:tf": "cd terraform-provider && go test ./..."
   },
   "devDependencies": {
     "wrangler": "^4.14.0"

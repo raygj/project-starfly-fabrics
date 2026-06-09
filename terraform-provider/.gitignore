@@ -1,0 +1,10 @@
+terraform.tfvars
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+terraform-provider-starfly
+bin/
+*.exe

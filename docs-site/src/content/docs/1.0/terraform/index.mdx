@@ -1,0 +1,36 @@
+---
+title: Terraform provider
+description: FIAM-as-code — manage Starfly fabrics, MCP tools, SSF streams, and
+  agent identities with Terraform.
+slug: 1.0/terraform
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+**Status:** Incubating — source in [`terraform-provider/`](https://github.com/raygj/project-starfly-fabrics/tree/main/terraform-provider) on this repository.
+
+<CardGrid>
+  <Card title="Quick start" icon="rocket">
+    [Install and configure](/1.0/terraform/quickstart/)
+  </Card>
+
+  <Card title="Resources" icon="document">
+    [Resource reference](/1.0/terraform/resources/)
+  </Card>
+
+  <Card title="Auth" icon="setting">
+    [mTLS and JWT migration](/1.0/terraform/auth/)
+  </Card>
+</CardGrid>
+
+## What it manages
+
+| Resource | Backend |
+|----------|---------|
+| `starfly_fabric` | `StarlightFabric` CRD (Kubernetes) |
+| `starfly_mcp_tool` | `POST/DELETE /v1/mcp/tools` |
+| `starfly_ssf_stream` | `POST/DELETE /v1/signals/stream` |
+| `starfly_agent_identity` | `POST /v1/identity/agent` |
+| `starfly_encryption_key` | `POST /v1/identity/agent/encryption-key` |
+
+Helm chart install stays in `helm_release` — see [examples/complete](https://github.com/raygj/project-starfly-fabrics/tree/main/terraform-provider/examples/complete).

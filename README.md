@@ -2,11 +2,15 @@
 
 **Non-human identity for the agentic fabric.**
 
-Starfly issues and validates WIMSE-profile JWTs for agents, enforces delegation policy, and propagates revocation state across federated peers. It is the policy enforcement point of the fabric.
+Public home for Starfly — service code, Terraform provider, documentation, and website.
 
-- **Site:** [starfly.dev](https://starfly.dev)
-- **Docs:** [starfly.dev/docs](https://starfly.dev/docs) · [getting started](docs/getting-started.md)
-- **Playground:** [starfly.dev/play](https://starfly.dev/play)
+| Surface | URL |
+|---------|-----|
+| Site | [starfly.dev](https://starfly.dev) |
+| Docs v1.0 | [starfly.dev/1.0/docs/](https://starfly.dev/1.0/docs/) |
+| API reference | [starfly.dev/api/](https://starfly.dev/api/) |
+| Terraform | [starfly.dev/terraform/](https://starfly.dev/terraform/) |
+| Playground | [starfly.dev/play/](https://starfly.dev/play/) |
 
 ## Quick start
 
@@ -15,60 +19,59 @@ git clone https://github.com/raygj/project-starfly-fabrics.git
 cd project-starfly-fabrics
 make build-dev
 STARFLY_STORAGE_PATH=/tmp/starfly-dev STARFLY_POLICY_BUNDLE_PATH=policies/dev ./bin/starfly --dev
+./sandbox/run.sh all
 ```
-
-Then: `./sandbox/run.sh all` — five proof use cases against the running PEP.
-
-Full tutorial: [docs/getting-started.md](docs/getting-started.md)
 
 ## Repository layout
 
 ```
-cmd/ pkg/ demos/ api/ policies/   Starfly service (Go) — minimum runnable export
-docs/                             v1 documentation (Diátaxis)
-sandbox/                          Manifest-driven use cases + AGENTS.md contract
-public/                           Website (Cloudflare Workers → starfly.dev)
-wrangler.jsonc                    Workers config
+cmd/ pkg/ demos/ api/ policies/     Starfly PEP (Go)
+terraform-provider/                 Terraform provider (FIAM-as-code)
+docs-site/                          Starlight docs (versioned, search, OpenAPI)
+docs/                               Markdown source (synced into docs-site)
+sandbox/                            Five proof use cases + AGENTS.md
+docs-site/public/                   Landing page + playground static assets
 ```
 
-## Documentation (v1)
+## Documentation
 
-| Quadrant | Start here |
-|----------|------------|
-| Tutorial | [docs/getting-started.md](docs/getting-started.md) |
-| Explanation | [docs/glossary.md](docs/glossary.md) · [concepts/](docs/concepts/) |
-| How-to | [docs/integrators/](docs/integrators/) · [sandbox/](sandbox/) |
-| Reference | [api/openapi.yaml](api/openapi.yaml) · [public/llms.txt](public/llms.txt) |
+Built with [Astro Starlight](https://starlight.astro.build/):
 
-**Agents:** read [AGENTS.md](AGENTS.md) first.
+- **Versioned** — `starlight-versions` (v1.0 at `/1.0/…`)
+- **Search** — Pagefind (built into Starlight)
+- **OpenAPI** — `starlight-openapi` from `api/openapi.yaml`
+- **Terraform subsite** — `/terraform/`
+
+```bash
+cd docs-site && npm ci && npm run dev   # local preview :4321
+```
+
+## Terraform provider
+
+```bash
+cd terraform-provider
+make build
+make install
+```
+
+Docs: [starfly.dev/terraform/](https://starfly.dev/terraform/)
 
 ## Develop
 
 ```bash
-make deps
-make build-dev      # dev-tagged binary
-make test           # pkg unit tests
-./demos/01-token-exchange.sh
+make test              # Starfly pkg tests
+npm run test:tf        # provider unit tests
+npm run deploy         # build docs + deploy to Cloudflare
 ```
 
-Website:
+## Maintainer exports
 
-```bash
-npm install
-npx wrangler deploy
-```
+From the private Mandala monorepo:
 
-Operator deploy steps: [DEPLOY.md](DEPLOY.md)
+- `communes/starfly/scripts/export-public-min.sh`
+- `communes/starfly/scripts/export-terraform-provider.sh`
 
-## Export from private monorepo
-
-Maintainers regenerate the code slice with:
-
-```bash
-communes/starfly/scripts/export-public-min.sh
-```
-
-Then merge `/tmp/export-starfly-min/` into this repo. See `system/export-public-SKILL.md` in the private Mandala workspace.
+See [DEPLOY.md](DEPLOY.md).
 
 ## License
 

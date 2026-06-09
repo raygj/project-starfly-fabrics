@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars and adjust paths for your machine.
+kubeconfig_path    = "/Users/you/.kube/config"
+namespace          = "starfly-system"
+fabric_name        = "prod"
+values_file        = "values-home-lab.yaml"
+wait_for_converged = false
