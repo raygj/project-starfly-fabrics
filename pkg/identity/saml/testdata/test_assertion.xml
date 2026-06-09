@@ -1,0 +1,22 @@
+<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_test_assertion_001" IssueInstant="2026-03-06T00:00:00Z">
+  <saml:Issuer>https://idp.corp.example.com/saml2</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress">alice@corp.example.com</saml:NameID>
+  </saml:Subject>
+  <saml:Conditions NotBefore="2020-01-01T00:00:00Z" NotOnOrAfter="2030-12-31T23:59:59Z"/>
+  <saml:AttributeStatement>
+    <saml:Attribute Name="http://schemas.xmlsoap.org/claims/emailaddress">
+      <saml:AttributeValue>alice@corp.example.com</saml:AttributeValue>
+    </saml:Attribute>
+    <saml:Attribute Name="http://schemas.xmlsoap.org/claims/role">
+      <saml:AttributeValue>admin</saml:AttributeValue>
+      <saml:AttributeValue>viewer</saml:AttributeValue>
+    </saml:Attribute>
+    <saml:Attribute Name="http://schemas.xmlsoap.org/claims/group">
+      <saml:AttributeValue>engineering</saml:AttributeValue>
+    </saml:Attribute>
+    <saml:Attribute Name="http://schemas.xmlsoap.org/claims/department">
+      <saml:AttributeValue>Platform</saml:AttributeValue>
+    </saml:Attribute>
+  </saml:AttributeStatement>
+</saml:Assertion>

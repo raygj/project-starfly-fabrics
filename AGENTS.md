@@ -5,7 +5,9 @@ You are working with the **Starfly sandbox** — a minimal, manifest-driven path
 ## Read first
 
 1. `sandbox/manifest.yaml` — profiles, use cases, screenshot map (source of truth)
-2. `docs/screenshots/README.md` — dashboard tab reference images
+2. `docs/getting-started.md` — build and run dev mode
+3. `docs/glossary.md` — trust domain vs audience (do not conflate)
+4. `public/llms.txt` — full doc index
 
 Do not guess endpoints or invent curl paths. The manifest wins.
 

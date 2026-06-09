@@ -1,0 +1,1096 @@
+openapi: 3.1.0
+info:
+  title: Starfly Fabrics API
+  description: |
+    Kubernetes-native NHI identity broker and shared signals aggregator.
+
+    Starfly validates source credentials, evaluates OPA policy, and mints
+    WIMSE-compliant JWTs via RFC 8693 token exchange.
+
+    When mTLS is enabled, protected endpoints run on port 8694.
+    Public endpoints (health, JWKS, metrics) always run on port 8693.
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: http://localhost:8693
+    description: Plaintext (dev mode)
+  - url: https://starfly.example.com:8694
+    description: mTLS (production)
+
+paths:
+  /v1/sys/health:
+    get:
+      operationId: getHealth
+      summary: Health check
+      description: Returns the health status of the Starfly unit.
+      tags: [System]
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              example:
+                initialized: true
+                locked: false
+                version: "1.0.0"
+                unit_id: "abc123def456"
+
+  /v1/exchange/token:
+    post:
+      operationId: exchangeToken
+      summary: Token exchange (RFC 8693)
+      description: |
+        Validates a source credential, evaluates OPA policy, and mints
+        a WIMSE-compliant JWT. Supports execution scoping (DPoP-style),
+        delegation via actor tokens, and capability narrowing.
+
+        Protected by mTLS when TLS is enabled.
+      tags: [Exchange]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenExchangeRequest"
+            examples:
+              k8s-sa:
+                summary: Kubernetes ServiceAccount
+                value:
+                  grant_type: "urn:ietf:params:oauth:grant-type:token-exchange"
+                  subject_token: "eyJhbGciOiJSUzI1NiIs..."
+                  subject_token_type: "urn:ietf:params:oauth:token-type:jwt"
+                  audience: "https://api.target.example.com"
+                  scope: "read:data"
+              spiffe-svid:
+                summary: SPIFFE SVID
+                value:
+                  grant_type: "urn:ietf:params:oauth:grant-type:token-exchange"
+                  subject_token: "eyJhbGciOiJSUzI1NiIs..."
+                  subject_token_type: "urn:starfly:token-type:spiffe-svid"
+                  audience: "spiffe://target.example.com"
+              execution-scoped:
+                summary: Execution-scoped token (DPoP-style)
+                value:
+                  grant_type: "urn:ietf:params:oauth:grant-type:token-exchange"
+                  subject_token: "eyJhbGciOiJSUzI1NiIs..."
+                  subject_token_type: "urn:ietf:params:oauth:token-type:jwt"
+                  audience: "https://api.example.com"
+                  execution_scope:
+                    htm: "POST"
+                    htu: "https://api.example.com/v1/transfers"
+                    payload_hash: "sha256-abc123"
+                    nonce: "unique-nonce-1"
+              delegation:
+                summary: Delegation via actor token
+                value:
+                  grant_type: "urn:ietf:params:oauth:grant-type:token-exchange"
+                  subject_token: "eyJhbGciOiJSUzI1NiIs..."
+                  subject_token_type: "urn:starfly:token-type:agent-a2a"
+                  audience: "https://api.example.com"
+                  actor_token: "eyJhbGciOiJSUzI1NiIs..."
+      responses:
+        "200":
+          description: Exchange succeeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenExchangeResponse"
+              example:
+                access_token: "eyJhbGciOiJSUzI1NiIs..."
+                issued_token_type: "urn:ietf:params:oauth:token-type:jwt"
+                token_type: "Bearer"
+                expires_in: 300
+                scope: "read:data"
+        "400":
+          description: Invalid request or unsupported grant type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                unsupported-grant:
+                  value:
+                    error: "unsupported_grant_type"
+                    error_description: "grant_type must be urn:ietf:params:oauth:grant-type:token-exchange"
+                invalid-token-type:
+                  value:
+                    error: "invalid_request"
+                    error_description: "unsupported subject_token_type"
+        "403":
+          description: Policy denied the exchange
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: "access_denied"
+                error_description: "policy denied: insufficient blast radius"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/identity/jwks:
+    get:
+      operationId: getJWKS
+      summary: JSON Web Key Set
+      description: |
+        Returns the public signing keys for verifying WIMSE JWTs issued by this unit.
+        During key rotation, multiple keys may be active.
+      tags: [Identity]
+      responses:
+        "200":
+          description: JWKS document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: object
+                      description: JWK (RFC 7517)
+              example:
+                keys:
+                  - kty: "RSA"
+                    kid: "starfly-dev-1"
+                    alg: "RS256"
+                    use: "sig"
+                    n: "0vx7agoebG..."
+                    e: "AQAB"
+
+  /v1/identity/agent:
+    post:
+      operationId: issueAgentIdentity
+      summary: Issue agent identity
+      description: |
+        Issues a verifiable identity token for an AI agent (MCP, A2A, WatsonX, custom).
+        Evaluates agent identity OPA policy for capability and blast radius constraints.
+
+        Protected by mTLS when TLS is enabled.
+      tags: [Identity]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgentIdentityRequest"
+            example:
+              agent_name: "code-assistant"
+              platform: "mcp"
+              capabilities: ["query-read", "tool-execute"]
+              max_blast_radius: "workspace:dev"
+              delegation_depth: 2
+              metadata:
+                mcp_server: "cursor-server-v1"
+      responses:
+        "200":
+          description: Agent identity issued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentIdentity"
+        "400":
+          description: Invalid request (missing name, invalid platform, empty capabilities)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "501":
+          description: Agent identity provider not configured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/signals/events:
+    post:
+      operationId: receiveSignalEvent
+      summary: Receive SSF/CAEP security event
+      description: |
+        Receives a Security Event Token (SET) per OpenID SSF/CAEP specification.
+        Events may trigger revocation index updates.
+
+        Protected by mTLS when TLS is enabled.
+      tags: [Signals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SecurityEvent"
+            example:
+              iss: "siem.example.com"
+              jti: "caep-001"
+              iat: 1709827200
+              aud: "starfly"
+              sub_id:
+                format: "spiffe_id"
+                spiffe_id: "spiffe://example.com/workload/api"
+              events:
+                "https://schemas.openid.net/secevent/caep/event-type/session-revoked":
+                  reason: "compromised_credential"
+                  initiating_entity: "siem"
+      responses:
+        "202":
+          description: Event accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+              example:
+                status: "accepted"
+        "400":
+          description: Invalid SET
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Signal denied by policy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "501":
+          description: Signal receiver not configured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/signals/stream:
+    post:
+      operationId: createStream
+      summary: Create SSF stream
+      description: |
+        Creates a new SSF event stream. The endpoint URL must use HTTPS
+        (localhost/127.0.0.1 exempted for dev/test).
+
+        Protected by mTLS when TLS is enabled.
+      tags: [Signals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StreamConfig"
+            example:
+              iss: "starfly"
+              aud: "downstream-consumer"
+              events_requested:
+                - "https://schemas.openid.net/secevent/caep/event-type/session-revoked"
+                - "https://schemas.openid.net/secevent/caep/event-type/credential-change"
+              delivery_method: "push"
+              endpoint_url: "https://consumer.example.com/events"
+      responses:
+        "201":
+          description: Stream created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "501":
+          description: Signal transmitter not configured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteStream
+      summary: Delete SSF stream
+      description: Removes an active SSF event stream.
+      tags: [Signals]
+      parameters:
+        - name: stream_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Stream deleted
+        "400":
+          description: Missing stream_id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Stream not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/signals/status:
+    get:
+      operationId: getStreamStatus
+      summary: Get SSF stream status
+      description: Returns the health status of an SSF stream.
+      tags: [Signals]
+      parameters:
+        - name: stream_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stream status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreamStatus"
+        "400":
+          description: Missing stream_id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Stream not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /.well-known/ssf-configuration:
+    get:
+      operationId: getSSFConfiguration
+      summary: SSF discovery document
+      description: |
+        Returns the OpenID Shared Signals Framework discovery document.
+        Clients use this to discover signal endpoints and capabilities.
+      tags: [Signals]
+      responses:
+        "200":
+          description: SSF configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SSFConfiguration"
+              example:
+                issuer: "starfly"
+                jwks_uri: "https://starfly.example.com/v1/identity/jwks"
+                delivery_methods_supported:
+                  - "https://schemas.openid.net/secevent/risc/delivery-method/push"
+                configuration_endpoint: "https://starfly.example.com/v1/signals/stream"
+                status_endpoint: "https://starfly.example.com/v1/signals/status"
+
+  /metrics:
+    get:
+      operationId: getMetrics
+      summary: Prometheus metrics
+      description: |
+        Prometheus-compatible metrics endpoint. Key metrics include:
+        `starfly_exchange_requests_total`, `starfly_exchange_duration_seconds`,
+        `starfly_revocation_check_errors_total`, `starfly_revocation_index_size`,
+        `starfly_nonce_tracker_size`.
+      tags: [System]
+      responses:
+        "200":
+          description: Prometheus text format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /v1/events:
+    get:
+      operationId: getEvents
+      summary: Live SSE event stream
+      description: |
+        Server-Sent Events stream of fabric activity. Events include exchanges,
+        denials, CAEP signals, and soul manifest updates. Filter by type with
+        the `types` query parameter.
+      tags: [System]
+      parameters:
+        - name: types
+          in: query
+          description: Comma-separated event type filter (exchange, denial, caep, signal, soul)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: SSE event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /v1/mcp/tools:
+    get:
+      operationId: listMCPTools
+      summary: List registered MCP tools
+      tags: [MCP]
+      responses:
+        "200":
+          description: Array of registered tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ToolEntry"
+    post:
+      operationId: registerMCPTool
+      summary: Register an MCP tool
+      description: Register a tool with its security requirements (capabilities, blast radius, execution binding).
+      tags: [MCP]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ToolEntry"
+      responses:
+        "201":
+          description: Tool registered
+    delete:
+      operationId: deregisterMCPTool
+      summary: Deregister an MCP tool
+      tags: [MCP]
+      parameters:
+        - name: tool_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Tool deregistered
+
+  /v1/mcp/verify:
+    post:
+      operationId: verifyMCPToolCall
+      summary: Verify a token for an MCP tool call
+      description: |
+        Runs the 9-check verification pipeline against the provided token and tool.
+        Used by non-Go MCP servers via the sidecar pattern.
+      tags: [MCP]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tool_id, token]
+              properties:
+                tool_id:
+                  type: string
+                token:
+                  type: string
+                request_body_hash:
+                  type: string
+                  description: SHA-256 base64url hash of the request body (for inp_hash check)
+      responses:
+        "200":
+          description: Verification passed
+        "403":
+          description: Verification failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # Universal tool registry — protocol-agnostic (UTC-008)
+  # Backwards-compatible: /v1/mcp/tools preserved as MCP alias above.
+  /v1/tools:
+    get:
+      operationId: listTools
+      summary: List registered tools (all protocols)
+      description: |
+        Returns all tools across all protocols. Filter by protocol using
+        the `protocol` query parameter. MCP-only callers may continue using
+        `/v1/mcp/tools` which is preserved as a backwards-compatible alias.
+      tags: [Tools]
+      parameters:
+        - name: protocol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by protocol (e.g. "mcp", "http", "a2a/2025-draft-01")
+      responses:
+        "200":
+          description: Array of registered tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UniversalToolEntry"
+        "503":
+          description: Tool registry not initialised
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: registerTool
+      summary: Register a tool (any protocol)
+      description: |
+        Register a tool with its security requirements and supported protocols.
+        If `protocols` is omitted or empty, the tool defaults to `["mcp"]`
+        for backwards compatibility.
+      tags: [Tools]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UniversalToolEntry"
+      responses:
+        "201":
+          description: Tool registered
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Tool registry not initialised
+
+  /v1/tools/{tool_id}:
+    get:
+      operationId: getTool
+      summary: Get a registered tool by ID
+      tags: [Tools]
+      parameters:
+        - name: tool_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Tool entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UniversalToolEntry"
+        "404":
+          description: Tool not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Tool registry not initialised
+    delete:
+      operationId: deregisterTool
+      summary: Deregister a tool
+      tags: [Tools]
+      parameters:
+        - name: tool_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Tool deregistered
+        "404":
+          description: Tool not found
+        "503":
+          description: Tool registry not initialised
+
+  /v1/tools/{tool_id}/audit:
+    get:
+      operationId: getToolAuditTrail
+      summary: Get audit trail for a tool
+      description: |
+        Returns the recent audit log for this tool — all verification decisions
+        (pass, deny, error) across all protocols. Uses the universal audit trail
+        regardless of which protocol the call arrived over.
+      tags: [Tools]
+      parameters:
+        - name: tool_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: Audit trail entries (newest first)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      format: date-time
+                    protocol:
+                      type: string
+                    decision:
+                      type: string
+                      enum: [allow, deny, error]
+                    subject:
+                      type: string
+                    notes:
+                      type: string
+        "404":
+          description: Tool not found
+        "501":
+          description: Audit trail not yet implemented (stub)
+        "503":
+          description: Tool registry not initialised
+
+  /v1/federation/revocation-hash:
+    get:
+      operationId: getFederationRevocationHash
+      summary: Get revocation index hash
+      description: Returns SHA-256 hash of the local revocation index for peer sync comparison.
+      tags: [Federation]
+      responses:
+        "200":
+          description: Revocation hash
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hash:
+                    type: string
+                  count:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /v1/federation/revocation-export:
+    get:
+      operationId: getFederationRevocationExport
+      summary: Export revocation index entries
+      description: Returns all revocation entries for peer reconciliation when hashes don't match.
+      tags: [Federation]
+      responses:
+        "200":
+          description: Revocation entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subject_id:
+                      type: string
+                    reason:
+                      type: string
+                    revoked_at:
+                      type: string
+                      format: date-time
+
+  /v1/identity/agent/encryption-key:
+    post:
+      operationId: registerEncryptionKey
+      summary: Register workload encryption key
+      description: |
+        Register a JWK public key for a workload. Used by ADR-0014 converged
+        credential management to encrypt secrets into the WIMSE JWT.
+      tags: [Identity]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workload_id, key]
+              properties:
+                workload_id:
+                  type: string
+                  description: WIMSE workload URI
+                key:
+                  type: object
+                  description: JWK public key (RSA or ECDSA)
+      responses:
+        "201":
+          description: Key registered
+        "400":
+          description: Invalid key format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [initialized, locked, version, unit_id]
+      properties:
+        initialized:
+          type: boolean
+        locked:
+          type: boolean
+        version:
+          type: string
+        unit_id:
+          type: string
+
+    TokenExchangeRequest:
+      type: object
+      required: [grant_type, subject_token, subject_token_type, audience]
+      properties:
+        grant_type:
+          type: string
+          description: Must be "urn:ietf:params:oauth:grant-type:token-exchange"
+          enum: ["urn:ietf:params:oauth:grant-type:token-exchange"]
+        subject_token:
+          type: string
+          description: The source credential being exchanged
+        subject_token_type:
+          type: string
+          description: Token type URI identifying the credential format
+          enum:
+            - "urn:ietf:params:oauth:token-type:jwt"
+            - "urn:starfly:token-type:spiffe-svid"
+            - "urn:starfly:token-type:oidc"
+            - "urn:starfly:token-type:kerberos"
+            - "urn:starfly:token-type:saml"
+            - "urn:starfly:token-type:mtls"
+            - "urn:starfly:token-type:aws-sts"
+            - "urn:starfly:token-type:gcp-wif"
+            - "urn:starfly:token-type:azure-mi"
+            - "urn:ietf:params:oauth:token-type:access_token"
+            - "urn:starfly:token-type:api-key"
+            - "urn:starfly:token-type:agent-mcp"
+            - "urn:starfly:token-type:agent-a2a"
+            - "urn:starfly:token-type:agent-passport"
+        audience:
+          type: string
+          description: Target trust domain or service URL
+        scope:
+          type: string
+          description: Requested scope
+        actor_token:
+          type: string
+          description: JWT of the delegating agent (for delegation chains)
+        execution_scope:
+          $ref: "#/components/schemas/ExecutionScope"
+
+    ExecutionScope:
+      type: object
+      description: DPoP-style execution scoping (RFC 9449). Binds the token to a specific HTTP action.
+      properties:
+        htm:
+          type: string
+          description: HTTP method (e.g., POST, GET)
+        htu:
+          type: string
+          description: Target URI
+        payload_hash:
+          type: string
+          description: SHA-256 hash of request body (base64url)
+        nonce:
+          type: string
+          description: Unique value for replay protection
+
+    TokenExchangeResponse:
+      type: object
+      required: [access_token, issued_token_type, token_type, expires_in]
+      properties:
+        access_token:
+          type: string
+          description: WIMSE-compliant JWT
+        issued_token_type:
+          type: string
+          description: Always "urn:ietf:params:oauth:token-type:jwt"
+        token_type:
+          type: string
+          description: Always "Bearer"
+        expires_in:
+          type: integer
+          description: Token lifetime in seconds (300 standard, 30 execution-scoped)
+        scope:
+          type: string
+
+    SecurityEvent:
+      type: object
+      description: Security Event Token (SET) per OpenID SSF/CAEP
+      required: [iss, jti, iat, aud, sub_id, events]
+      properties:
+        iss:
+          type: string
+          description: Event issuer
+        jti:
+          type: string
+          description: Unique event ID
+        iat:
+          type: integer
+          format: int64
+          description: Issued-at timestamp (Unix)
+        aud:
+          type: string
+          description: Target audience
+        sub_id:
+          $ref: "#/components/schemas/SubjectIdentifier"
+        events:
+          type: object
+          description: Map of event type URI to event-specific claims
+          additionalProperties:
+            type: object
+            additionalProperties: true
+        txn:
+          type: string
+          description: Transaction ID for correlation
+
+    SubjectIdentifier:
+      type: object
+      required: [format]
+      properties:
+        format:
+          type: string
+          description: Identifier format (spiffe_id, email, uri)
+        spiffe_id:
+          type: string
+          description: SPIFFE ID (when format=spiffe_id)
+        email:
+          type: string
+          description: Email address (when format=email)
+        uri:
+          type: string
+          description: WIMSE URI (when format=uri)
+
+    StreamConfig:
+      type: object
+      required: [iss, aud, events_requested, delivery_method]
+      properties:
+        iss:
+          type: string
+        aud:
+          type: string
+        events_requested:
+          type: array
+          items:
+            type: string
+        events_delivered:
+          type: array
+          items:
+            type: string
+        delivery_method:
+          type: string
+          enum: ["push", "poll"]
+        endpoint_url:
+          type: string
+          description: HTTPS endpoint for push delivery (must be HTTPS, except localhost)
+
+    Stream:
+      type: object
+      properties:
+        stream_id:
+          type: string
+        iss:
+          type: string
+        aud:
+          type: string
+        events_supported:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: ["enabled", "paused", "disabled"]
+
+    StreamStatus:
+      type: object
+      properties:
+        stream_id:
+          type: string
+        status:
+          type: string
+        subject:
+          type: string
+
+    SSFConfiguration:
+      type: object
+      properties:
+        issuer:
+          type: string
+        jwks_uri:
+          type: string
+        delivery_methods_supported:
+          type: array
+          items:
+            type: string
+        configuration_endpoint:
+          type: string
+        status_endpoint:
+          type: string
+
+    AgentIdentityRequest:
+      type: object
+      required: [agent_name, platform, capabilities]
+      properties:
+        agent_name:
+          type: string
+          description: Human-readable agent name
+        platform:
+          type: string
+          description: Agent platform
+          enum: ["mcp", "a2a", "watsonx", "custom"]
+        capabilities:
+          type: array
+          items:
+            type: string
+          description: Requested capabilities
+        on_behalf_of:
+          type: string
+          description: Parent agent ID for delegation
+        max_blast_radius:
+          type: string
+          description: Maximum blast radius (e.g., "workspace:dev", "namespace", "cluster")
+        delegation_depth:
+          type: integer
+          description: Max delegation hops (0 = terminal agent)
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+
+    AgentIdentity:
+      type: object
+      properties:
+        agent_id:
+          type: string
+          description: WIMSE-format agent identifier
+        token:
+          type: string
+          description: Signed JWT agent identity token
+        platform:
+          type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+        blast_radius:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: Error code (RFC 8693 compatible)
+          enum:
+            - "invalid_request"
+            - "unsupported_grant_type"
+            - "access_denied"
+            - "server_error"
+            - "not_implemented"
+            - "not_found"
+            - "method_not_allowed"
+        error_description:
+          type: string
+          description: Human-readable error detail
+
+    ToolEntry:
+      type: object
+      required: [tool_id, name]
+      properties:
+        tool_id:
+          type: string
+          description: Unique identifier for the tool
+        name:
+          type: string
+          description: Human-readable name
+        resource_uri:
+          type: string
+          description: RFC 8707 resource indicator. Token aud must match this.
+        required_capabilities:
+          type: array
+          items:
+            type: string
+          description: Capabilities the token must include
+        max_blast_radius:
+          type: string
+          description: Maximum blast radius scope (e.g., "namespace:analytics")
+        requires_execution:
+          type: boolean
+          description: Whether execution binding checks (exec_act, inp_hash, target) are enforced
+        allowed_operations:
+          type: array
+          items:
+            type: string
+          description: Valid exec_act values (when requires_execution is true)
+        allowed_targets:
+          type: array
+          items:
+            type: string
+          description: Valid target URIs (when requires_execution is true)
+
+    UniversalToolEntry:
+      description: |
+        Tool registration entry for the universal tool-call layer (ADR-0022 / UTC-008).
+        Extends ToolEntry with protocol declarations and adapter metadata.
+        Backwards-compatible: omitting `protocols` defaults to `["mcp"]`.
+      allOf:
+        - $ref: "#/components/schemas/ToolEntry"
+      properties:
+        protocols:
+          type: array
+          items:
+            type: string
+          description: |
+            Protocols this tool accepts. Verifier rejects calls arriving via an
+            unlisted protocol. Supported values: "mcp", "http",
+            "a2a/2025-draft-01". Omit to default to ["mcp"].
+          example: ["mcp", "http"]
+        description:
+          type: string
+          description: Human-readable tool description (shown in tool listings)
+        version:
+          type: string
+          description: Tool schema version (semver)
+
+tags:
+  - name: Exchange
+    description: RFC 8693 token exchange
+  - name: Identity
+    description: JWKS, agent identity, and encryption key management
+  - name: Signals
+    description: OpenID Shared Signals (SSF/CAEP)
+  - name: MCP
+    description: MCP security middleware — tool registry and verification (backwards-compatible alias)
+  - name: Tools
+    description: |
+      Universal tool-call layer (ADR-0022). Protocol-agnostic tool registry and
+      verification across MCP, HTTP, and A2A adapters. `/v1/mcp/tools` is
+      preserved as a backwards-compatible alias for existing MCP deployments.
+  - name: Federation
+    description: Multi-cluster JWKS federation and revocation sync
+  - name: System
+    description: Health, metrics, and SSE event stream
