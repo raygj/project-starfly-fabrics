@@ -8,3 +8,4 @@ crash.*.log
 terraform-provider-starfly
 bin/
 *.exe
+tfplan
