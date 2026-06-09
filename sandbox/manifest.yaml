@@ -1,0 +1,54 @@
+# Starfly sandbox manifest — source of truth for AGENTS.md, run.sh, and starfly.dev/play.
+version: 1
+
+bootstrap:
+  local:
+    description: Personal PEP on your laptop (recommended)
+    url: http://localhost:8693
+    steps:
+      - git clone https://github.com/starfly-fabrics/starfly.git
+      - cd starfly && make build
+      - STARFLY_STORAGE_PATH=/tmp/starfly-dev STARFLY_POLICY_BUNDLE_PATH=policies/dev ./bin/starfly --dev
+    verify: GET /v1/sys/health
+  lab:
+    description: Shared Talos lab fabric-sandbox (LAN only)
+    url: http://192.168.1.98:30095
+    peer_alpha_url: http://192.168.1.98:31104
+    notes: Requires VPN/LAN access. Uses dev exchange policy; /v1/identity/agent may require mTLS auth.
+  personal:
+    description: Your own Helm release in a homelab cluster
+    url: "${STARFLY_URL}"
+    steps:
+      - helm upgrade --install my-sandbox oci://ghcr.io/starfly-fabrics/charts/starfly -f values-sandbox.yaml
+    notes: Chart path is illustrative — use your operator values file.
+
+use_cases:
+  - id: exchange
+    title: Token exchange
+    script: use-cases/01-exchange.sh
+    dashboard_screenshot: docs/screenshots/fabric-pulse.png
+    proves: Any workload credential in → scoped WIMSE JWT out (RFC 8693)
+
+  - id: revocation
+    title: Real-time revocation
+    script: use-cases/02-revocation.sh
+    dashboard_screenshot: docs/screenshots/federation.png
+    proves: CAEP session-revoked denies the identity immediately (<30ms index lookup)
+
+  - id: mcp
+    title: MCP confused deputy
+    script: use-cases/03-mcp-confused-deputy.sh
+    dashboard_screenshot: docs/screenshots/mcp-security.png
+    proves: Token audience bound to one tool URI; wrong tool returns 403
+
+  - id: federation
+    title: Federation sync
+    script: use-cases/04-federation.sh
+    dashboard_screenshot: docs/screenshots/federation.png
+    proves: Revocation hash export + peer lag metrics for cross-fabric sync
+
+  - id: observability
+    title: Observability
+    script: use-cases/05-observability.sh
+    dashboard_screenshot: docs/screenshots/soul.png
+    proves: Health, JWKS, Prometheus metrics, and live SSE event stream

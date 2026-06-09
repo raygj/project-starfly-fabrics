@@ -12,10 +12,25 @@ Starfly issues and validates WIMSE-profile JWTs for agents, enforces delegation 
 This is the **public home** for Starfly — source, docs, and the website. Exported releases land here.
 
 ```
-public/         Website (static assets → starfly.dev)
+public/           Website (static assets → starfly.dev)
+sandbox/          Five use-case scripts + manifest.yaml
+AGENTS.md         Agent bootstrap contract (Cursor, Claude, etc.)
+docs/             Screenshots + documentation (Phase 0 → Starlight)
 wrangler.jsonc    Cloudflare Workers config
-docs/             Documentation (Phase 0 → Starlight)
 ```
+
+## Sandbox
+
+Five curl-driven proof use cases against a local or lab PEP:
+
+```bash
+./sandbox/init.sh
+STARFLY_PROFILE=lab ./sandbox/run.sh all   # Talos lab (LAN)
+```
+
+- **Playground UI:** [starfly.dev/play](https://starfly.dev/play)
+- **Manifest:** [`sandbox/manifest.yaml`](sandbox/manifest.yaml)
+- **Agents:** [`AGENTS.md`](AGENTS.md)
 
 ## Develop
 

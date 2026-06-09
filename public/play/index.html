@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground — Starfly Sandbox</title>
+  <meta name="description" content="Bootstrap a Starfly sandbox and run five proof use cases — exchange, revocation, MCP, federation, observability.">
+  <link rel="canonical" href="https://starfly.dev/play">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070a0f;
+      --glow: #0d2847;
+      --surface: #0f1419;
+      --surface-2: #121820;
+      --border: #1a2433;
+      --text: #d4dce8;
+      --muted: #5c6b80;
+      --accent: #4da3ff;
+      --accent-soft: rgba(77, 163, 255, 0.12);
+      --term-bg: #050807;
+      --term-border: #1a3328;
+      --term-green: #3dd68c;
+      --term-dim: #6b8f7a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 90% 50% at 50% -20%, var(--glow), transparent);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .logo a { color: inherit; text-decoration: none; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-left: 1rem;
+    }
+    nav a:hover { color: var(--accent); }
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr 320px;
+      gap: 0;
+      min-height: calc(100vh - 57px);
+    }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      .preview { display: none; }
+    }
+    .sidebar {
+      border-right: 1px solid var(--border);
+      padding: 1.25rem 0;
+      background: var(--surface);
+    }
+    .sidebar h2 {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .step {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      border-left: 2px solid transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 0.88rem;
+      padding: 0.65rem 1.25rem;
+      cursor: pointer;
+    }
+    .step:hover { background: var(--accent-soft); }
+    .step.active {
+      border-left-color: var(--accent);
+      background: var(--accent-soft);
+      color: #f0f4fa;
+    }
+    .step small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-top: 0.15rem;
+    }
+    .main { padding: 1.5rem; overflow: auto; }
+    .profile-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .chip {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 650;
+      color: #f0f4fa;
+      margin-bottom: 0.35rem;
+    }
+    .proves {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      max-width: 42rem;
+    }
+    .terminal {
+      background: var(--term-bg);
+      border: 1px solid var(--term-border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .terminal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.85rem;
+      border-bottom: 1px solid var(--term-border);
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.7rem;
+      color: var(--term-dim);
+    }
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--term-border);
+      color: var(--term-green);
+      font-family: inherit;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: rgba(61, 214, 140, 0.1); }
+    pre {
+      margin: 0;
+      padding: 1rem 1.1rem;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: var(--term-green);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      max-width: 42rem;
+    }
+    .note strong { color: var(--text); font-weight: 600; }
+    .preview {
+      border-left: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1.25rem;
+      overflow: auto;
+    }
+    .preview h2 {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .preview img {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .preview p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.65rem;
+    }
+    footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: ui-monospace, Menlo, monospace;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="/">Starfly</a> / Playground</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="https://github.com/raygj/project-starfly-fabrics">GitHub</a>
+      <a href="https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md">AGENTS.md</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Bootstrap</h2>
+      <button class="step active" data-id="bootstrap">Clone &amp; init</button>
+
+      <h2 style="margin-top:1.25rem">Use cases</h2>
+      <button class="step" data-id="exchange">1 · Token exchange</button>
+      <button class="step" data-id="revocation">2 · Revocation</button>
+      <button class="step" data-id="mcp">3 · MCP deputy</button>
+      <button class="step" data-id="federation">4 · Federation</button>
+      <button class="step" data-id="observability">5 · Observability</button>
+      <button class="step" data-id="all"><small>Run all five</small></button>
+    </aside>
+
+    <main class="main">
+      <div class="profile-bar" id="profiles"></div>
+      <h1 id="title">Bootstrap your sandbox</h1>
+      <p class="proves" id="proves"></p>
+      <div class="terminal">
+        <div class="terminal-head">
+          <span id="term-label">sandbox/cli</span>
+          <button class="copy-btn" id="copy">Copy</button>
+        </div>
+        <pre id="commands"></pre>
+      </div>
+      <p class="note" id="note"></p>
+    </main>
+
+    <aside class="preview">
+      <h2>Dashboard</h2>
+      <img id="shot" src="/docs/screenshots/fabric-pulse.png" alt="Dashboard screenshot" width="640" height="400">
+      <p id="shot-caption">Fabric Pulse — live exchange rate and latency on the ops dashboard.</p>
+    </aside>
+  </div>
+
+  <footer>manifest: sandbox/manifest.yaml · agents: AGENTS.md · v1 sketch</footer>
+
+  <script>
+    const PROFILES = {
+      local: {
+        label: "local",
+        url: "http://localhost:8693",
+        note: "Run <strong>./bin/starfly --dev</strong> on your laptop first, or use the lab profile if you are on the Talos LAN."
+      },
+      lab: {
+        label: "lab",
+        url: "http://192.168.1.98:30095",
+        note: "<strong>LAN only.</strong> fabric-sandbox on the Talos cluster. This page cannot call it from the public internet — copy commands into your terminal on the lab network."
+      }
+    };
+
+    const STEPS = {
+      bootstrap: {
+        title: "Bootstrap your sandbox",
+        proves: "Clone the public repo, verify PEP health, then run use cases from the manifest.",
+        screenshot: "/docs/screenshots/fabric-pulse.png",
+        caption: "After init, exchanges show up on Fabric Pulse.",
+        commands: (p) => `git clone https://github.com/raygj/project-starfly-fabrics.git
+cd project-starfly-fabrics
+export STARFLY_PROFILE=${p.label}
+./sandbox/init.sh`
+      },
+      exchange: {
+        title: "1 · Token exchange",
+        proves: "Any workload credential in → scoped WIMSE JWT out (RFC 8693).",
+        screenshot: "/docs/screenshots/fabric-pulse.png",
+        caption: "Fabric Pulse — exchange rate and active agents.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh exchange
+
+# or directly:
+curl -s ${p.url}/v1/sys/health | jq .
+./sandbox/use-cases/01-exchange.sh`
+      },
+      revocation: {
+        title: "2 · Real-time revocation",
+        proves: "CAEP session-revoked denies the identity immediately — the 30ms kill switch path.",
+        screenshot: "/docs/screenshots/federation.png",
+        caption: "Federation tab — revocation propagation across fabrics.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh revocation`
+      },
+      mcp: {
+        title: "3 · MCP confused deputy",
+        proves: "Token audience bound to one tool URI; presenting it to another tool returns 403.",
+        screenshot: "/docs/screenshots/mcp-security.png",
+        caption: "MCP Security — tool calls and policy enforcement.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh mcp`
+      },
+      federation: {
+        title: "4 · Federation sync",
+        proves: "Revocation hash export and peer lag metrics for cross-fabric sync.",
+        screenshot: "/docs/screenshots/federation.png",
+        caption: "Sandbox peers to fabric-alpha for federation demos.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh federation
+
+# peek hash:
+curl -s ${p.url}/v1/federation/revocation-hash | jq .`
+      },
+      observability: {
+        title: "5 · Observability",
+        proves: "Health, JWKS, Prometheus metrics, and the live SSE event stream.",
+        screenshot: "/docs/screenshots/soul.png",
+        caption: "Soul — behavioral profile and fabric heartbeat.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh observability
+
+# live events (Ctrl-C to stop):
+curl -N ${p.url}/v1/events`
+      },
+      all: {
+        title: "Run all five",
+        proves: "Full sandbox tour — the acceptance path for agents and evaluators.",
+        screenshot: "/docs/screenshots/trust-tree.png",
+        caption: "Trust Tree — trust domain hierarchy after the tour.",
+        commands: (p) => `export STARFLY_PROFILE=${p.label}
+./sandbox/run.sh all`
+      }
+    };
+
+    let profile = "local";
+    let step = "bootstrap";
+
+    const el = (id) => document.getElementById(id);
+
+    function renderProfiles() {
+      el("profiles").innerHTML = Object.keys(PROFILES).map((key) =>
+        `<button class="chip${key === profile ? " active" : ""}" data-profile="${key}">${key}</button>`
+      ).join("");
+      el("profiles").querySelectorAll(".chip").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          profile = btn.dataset.profile;
+          renderProfiles();
+          renderStep();
+        });
+      });
+    }
+
+    function renderStep() {
+      const p = PROFILES[profile];
+      const s = STEPS[step];
+      document.querySelectorAll(".step").forEach((b) => {
+        b.classList.toggle("active", b.dataset.id === step);
+      });
+      el("title").textContent = s.title;
+      el("proves").textContent = s.proves;
+      el("commands").textContent = s.commands(p);
+      el("term-label").textContent = `STARFLY_PROFILE=${p.label}`;
+      el("note").innerHTML = p.note;
+      el("shot").src = s.screenshot;
+      el("shot-caption").textContent = s.caption;
+    }
+
+    document.querySelectorAll(".step").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        step = btn.dataset.id;
+        renderStep();
+      });
+    });
+
+    el("copy").addEventListener("click", async () => {
+      const text = el("commands").textContent;
+      await navigator.clipboard.writeText(text);
+      el("copy").textContent = "Copied";
+      setTimeout(() => { el("copy").textContent = "Copy"; }, 1500);
+    });
+
+    renderProfiles();
+    renderStep();
+  </script>
+</body>
+</html>
