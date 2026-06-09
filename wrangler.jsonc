@@ -2,6 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "project-starfly-fabrics",
   "compatibility_date": "2026-06-09",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "starfly.dev",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./public"
   }
