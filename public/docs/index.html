@@ -5,112 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Docs — Starfly</title>
   <link rel="canonical" href="https://starfly.dev/docs/">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #070a0f;
-      --surface: #0f1419;
-      --border: #1a2433;
-      --text: #d4dce8;
-      --muted: #5c6b80;
-      --accent: #4da3ff;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 3rem 1.5rem;
-    }
-    .wrap { max-width: 42rem; margin: 0 auto; }
-    .logo {
-      font-family: ui-monospace, Menlo, monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-    .logo a { color: inherit; text-decoration: none; }
-    h1 { font-size: 1.75rem; color: #f0f4fa; margin-bottom: 0.5rem; }
-    .lead { color: var(--muted); margin-bottom: 2rem; }
-    section { margin-bottom: 2rem; }
-    h2 {
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-    ul { list-style: none; }
-    li { margin-bottom: 0.5rem; }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    a:hover { text-decoration: underline; }
-    .card {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-    code {
-      font-family: ui-monospace, Menlo, monospace;
-      font-size: 0.85em;
-      background: rgba(77,163,255,0.1);
-      padding: 0.1em 0.35em;
-      border-radius: 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="/docs/assets/doc.css">
 </head>
 <body>
-  <div class="wrap">
-    <div class="logo"><a href="/">Starfly</a> / Docs v1</div>
-    <h1>Documentation</h1>
-    <p class="lead">Tutorials, concepts, and integrator guides. Markdown lives in the repo; this hub links the v1 set.</p>
-
-    <div class="card">
-      <strong>Fastest path</strong><br>
-      <code>git clone … && make build-dev && ./sandbox/run.sh all</code><br>
-      <a href="/play">Open playground →</a>
-    </div>
-
-    <section>
-      <h2>Tutorial</h2>
-      <ul>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/getting-started.md">Getting started</a> — first exchange in 15 minutes</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Explanation</h2>
-      <ul>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/glossary.md">Glossary</a></li>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/concepts/trust-domains.md">Trust domains</a></li>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/concepts/exchange.md">Exchange</a> — 124ns invariant</li>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/concepts/revocation.md">Revocation</a> — 30ms kill switch</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Integrators</h2>
-      <ul>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/integrators/token-exchange.md">Token exchange</a></li>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/docs/integrators/mcp.md">MCP security</a></li>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md">AGENTS.md</a> — agent bootstrap</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Reference</h2>
-      <ul>
-        <li><a href="https://github.com/raygj/project-starfly-fabrics/blob/main/api/openapi.yaml">OpenAPI</a></li>
-        <li><a href="/llms.txt">llms.txt</a> — machine index</li>
-      </ul>
-    </section>
+  <header>
+    <div class="logo"><a href="/">Starfly</a> / Docs</div>
+    <nav>
+      <a href="/play">Playground</a>
+      <a href="https://github.com/raygj/project-starfly-fabrics">GitHub</a>
+    </nav>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <article style="padding:2rem 1.75rem">
+      <h1>Documentation</h1>
+      <p style="color:var(--muted);margin-bottom:1.5rem">
+        Tutorials, concepts, and integrator guides — served on starfly.dev.
+        Source markdown lives in the repo under <code>docs/</code>.
+      </p>
+      <p style="margin-bottom:1rem"><a href="/docs/getting-started/">Start with Getting started →</a></p>
+      <p><a href="/play">Open playground →</a></p>
+    </article>
   </div>
+  <script src="/docs/assets/doc.js"></script>
+  <script>document.addEventListener("DOMContentLoaded",()=>{renderSidebar("")});</script>
 </body>
 </html>
