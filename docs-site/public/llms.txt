@@ -29,6 +29,9 @@
 - /1.0/docs/concepts/revocation/ — 30ms kill switch invariant
 - /1.0/docs/integrators/token-exchange/ — RFC 8693 integrator guide
 - /1.0/docs/integrators/mcp/ — MCP confused deputy mitigation
+- /1.0/docs/integrators/utc/ — Universal Tool-Calling Layer (multi-protocol adapters)
+- /1.0/docs/integrators/dashboard/ — operations NOC (async metrics/SSE, not hot path)
+- /1.0/docs/integrators/starfly-graph/ — NATS→FalkorDB runtime KG (async consumer)
 
 ## Terraform provider
 

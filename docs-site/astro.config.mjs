@@ -62,6 +62,9 @@ export default defineConfig({
 					items: [
 						{ label: 'Token exchange', slug: 'docs/integrators/token-exchange' },
 						{ label: 'MCP security', slug: 'docs/integrators/mcp' },
+						{ label: 'UTC (multi-protocol tools)', slug: 'docs/integrators/utc' },
+						{ label: 'Operations dashboard', slug: 'docs/integrators/dashboard' },
+						{ label: 'Starfly Graph', slug: 'docs/integrators/starfly-graph' },
 					],
 				},
 				{
