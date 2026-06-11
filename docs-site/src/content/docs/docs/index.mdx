@@ -5,27 +5,55 @@ description: Tutorials, concepts, integrators, and API reference for the Starfly
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-Welcome to Starfly v1 documentation.
+**Starfly secures agents without replacing your IdP** — turn platform credentials into scoped WIMSE JWTs, kill compromised access in milliseconds, and verify tool calls on one fabric.
 
 <CardGrid>
   <Card title="Getting started" icon="rocket">
-    [First exchange in 15 minutes](/1.0/docs/getting-started/)
+    Running PEP and your first WIMSE JWT in 15 minutes — no cluster required.
+
+    [Start the tutorial](/1.0/docs/getting-started/)
   </Card>
+
+  <Card title="Concepts" icon="open-book">
+    How exchange, revocation, and trust domains work — and why the hot path stays fast.
+
+    [Exchange](/1.0/docs/concepts/exchange/) · [Revocation](/1.0/docs/concepts/revocation/) · [Trust domains](/1.0/docs/concepts/trust-domains/)
+  </Card>
+
+  <Card title="Glossary" icon="information">
+    Trust domain vs audience, PEP, UTC, and every term the dashboard AI bar uses.
+
+    [Read the glossary](/1.0/docs/glossary/)
+  </Card>
+
+  <Card title="Integrators" icon="puzzle">
+    Wire agents, tools, and ops surfaces — token exchange, MCP, multi-protocol UTC, dashboard, graph.
+
+    [Token exchange](/1.0/docs/integrators/token-exchange/) · [MCP](/1.0/docs/integrators/mcp/) · [UTC](/1.0/docs/integrators/utc/)
+  </Card>
+
   <Card title="Playground" icon="laptop">
-    [Interactive sandbox](/play/)
+    Step through sandbox scenarios with screenshots — exchange, revocation, federation, MCP.
+
+    [Open playground](/play/)
   </Card>
+
   <Card title="Terraform" icon="setting">
+    Declare fabrics, tools, and agent identity as code.
+
     [FIAM-as-code provider](/terraform/)
   </Card>
+
   <Card title="API reference" icon="document">
-    [OpenAPI](/api/)
-  </Card>
-  <Card title="Integrators" icon="puzzle">
-    [UTC](/1.0/docs/integrators/utc/) · [Dashboard](/1.0/docs/integrators/dashboard/) · [Graph](/1.0/docs/integrators/starfly-graph/)
+    RFC 8693 exchange, MCP verify, signals, federation — generated from OpenAPI.
+
+    [Browse API](/api/)
   </Card>
 </CardGrid>
 
-## Sacred invariants
+## Fabric invariants
 
-1. **124ns exchange hot path** — no new synchronous dependencies on the exchange pipeline.
-2. **30ms revocation kill switch** — propagation latency is not negotiable.
+1. **Exchange stays fast** — no new synchronous dependencies on the token exchange pipeline.
+2. **Revocation stays fast** — kill-switch propagation latency is not negotiable.
+
+Async surfaces ([dashboard](/1.0/docs/integrators/dashboard/), [graph](/1.0/docs/integrators/starfly-graph/), [UTC](/1.0/docs/integrators/utc/)) observe the fabric — they never block exchange or revocation.

@@ -1,14 +1,14 @@
 # Starfly — machine-readable doc index
 # https://starfly.dev/llms.txt
 
-> Starfly is a non-human identity broker. RFC 8693 token exchange, WIMSE JWTs, OPA policy, CAEP revocation, MCP tool verification, federation sync.
+> Starfly secures agents without replacing your IdP. RFC 8693 exchange, WIMSE JWTs, OPA policy, CAEP revocation, MCP verification, federation sync.
 
 ## Site
 
 - https://starfly.dev — product home
-- https://starfly.dev/1.0/docs/ — documentation v1.0 (Starlight + Pagefind search)
-- https://starfly.dev/terraform/ — Terraform provider subsite
-- https://starfly.dev/api/ — OpenAPI reference (generated)
+- https://starfly.dev/1.0/docs/ — documentation hub (Starlight + Pagefind)
+- https://starfly.dev/terraform/ — Terraform provider
+- https://starfly.dev/api/ — OpenAPI reference
 - https://starfly.dev/play/ — sandbox playground
 
 ## Repository
@@ -17,21 +17,22 @@
 
 ## Agent bootstrap
 
-- AGENTS.md — Cursor/Claude agents read first
-- sandbox/manifest.yaml — profiles and five use cases
+- AGENTS.md — agents read first; run sandbox before suggesting integration
+- sandbox/manifest.yaml — profiles and five use cases (source of truth)
 - sandbox/run.sh — proof scripts
 
 ## Documentation v1.0
 
-- /1.0/docs/getting-started/ — clone, build, dev mode, first exchange
-- /1.0/docs/glossary/ — trust domain vs audience
-- /1.0/docs/concepts/exchange/ — 124ns hot path invariant
-- /1.0/docs/concepts/revocation/ — 30ms kill switch invariant
+- /1.0/docs/getting-started/ — first WIMSE JWT in 15 minutes
+- /1.0/docs/glossary/ — trust domain vs audience, full vocabulary
+- /1.0/docs/concepts/exchange/ — token exchange hot path
+- /1.0/docs/concepts/revocation/ — kill switch
+- /1.0/docs/concepts/trust-domains/ — inbound identity plane
 - /1.0/docs/integrators/token-exchange/ — RFC 8693 integrator guide
-- /1.0/docs/integrators/mcp/ — MCP confused deputy mitigation
-- /1.0/docs/integrators/utc/ — Universal Tool-Calling Layer (multi-protocol adapters)
-- /1.0/docs/integrators/dashboard/ — operations NOC (async metrics/SSE, not hot path)
-- /1.0/docs/integrators/starfly-graph/ — NATS→FalkorDB runtime KG (async consumer)
+- /1.0/docs/integrators/mcp/ — confused deputy mitigation
+- /1.0/docs/integrators/utc/ — multi-protocol tool verification
+- /1.0/docs/integrators/dashboard/ — ops NOC (async, not hot path)
+- /1.0/docs/integrators/starfly-graph/ — runtime KG (async consumer)
 
 ## Terraform provider
 
@@ -41,5 +42,5 @@
 
 ## Invariants
 
-- 124ns exchange hot path — no new synchronous deps on exchange pipeline
-- 30ms revocation kill switch — propagation latency not negotiable
+- Exchange hot path — no new synchronous deps on exchange pipeline
+- Revocation kill switch — propagation latency not negotiable

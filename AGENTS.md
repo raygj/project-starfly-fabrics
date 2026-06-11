@@ -1,73 +1,88 @@
 # Starfly Agent Guide
 
-You are working with the **Starfly sandbox** — a minimal, manifest-driven path from bootstrap to five proof use cases.
+You are working with the **Starfly public sandbox** — prove exchange, revocation, MCP, federation, and observability against a live PEP before suggesting integration code.
+
+**Outcome:** five `ok`/`fail` scripts that show the fabric works; then point the human to the right integrator doc on [starfly.dev](https://starfly.dev/1.0/docs/).
 
 ## Read first
 
-1. `sandbox/manifest.yaml` — profiles, use cases, screenshot map (source of truth)
-2. `docs/getting-started.md` — build and run dev mode
-3. `docs/glossary.md` — trust domain vs audience (do not conflate)
-4. `public/llms.txt` — full doc index
+| Order | Source | Why |
+|-------|--------|-----|
+| 1 | `sandbox/manifest.yaml` | Profiles, use cases, endpoints — **source of truth** |
+| 2 | [Getting started](https://starfly.dev/1.0/docs/getting-started/) | Build and first exchange |
+| 3 | [Glossary](https://starfly.dev/1.0/docs/glossary/) | Trust domain ≠ audience |
+| 4 | [llms.txt](https://starfly.dev/llms.txt) | Full doc index |
 
 Do not guess endpoints or invent curl paths. The manifest wins.
 
 ## Bootstrap
 
 ```bash
-# 1. Pick a profile
-export STARFLY_PROFILE=local   # laptop: ./bin/starfly --dev on :8693
-export STARFLY_PROFILE=lab     # Talos lab fabric-sandbox (LAN)
-export STARFLY_PROFILE=personal  # requires STARFLY_URL
+export STARFLY_PROFILE=local    # laptop :8693 (recommended)
+export STARFLY_PROFILE=lab      # Talos lab — LAN/VPN only
+export STARFLY_PROFILE=personal # set STARFLY_URL to your Helm release
 
-# 2. Verify PEP is up
-./sandbox/init.sh
-
-# 3. Run use cases
-./sandbox/run.sh all
+./sandbox/init.sh               # verify PEP health
+./sandbox/run.sh all            # five proof scripts
 ```
 
-### Profile notes
+### Profiles
 
-| Profile | URL | When to use |
-|---------|-----|-------------|
-| `local` | `http://localhost:8693` | Personal sandbox — full dev-mode surface |
-| `lab` | `http://192.168.1.98:30095` | Shared Talos cluster; LAN/VPN only |
-| `personal` | `$STARFLY_URL` | Operator's own Helm release |
+| Profile | URL | Use when |
+|---------|-----|----------|
+| `local` | `http://localhost:8693` | Full dev-mode surface on your machine |
+| `lab` | `http://192.168.1.98:30095` | Shared Talos sandbox (LAN only) |
+| `personal` | `$STARFLY_URL` | Your own fabric unit |
 
-**Local bootstrap** (if nothing is running):
+**Start local PEP** (nothing running yet):
 
 ```bash
-git clone https://github.com/starfly-fabrics/starfly.git
-cd starfly && make build
+git clone https://github.com/raygj/project-starfly-fabrics.git
+cd project-starfly-fabrics
+make build-dev
 STARFLY_STORAGE_PATH=/tmp/starfly-dev STARFLY_POLICY_BUNDLE_PATH=policies/dev ./bin/starfly --dev
 ```
 
-## Use cases (run in order)
+## Use cases
 
-| # | ID | Script | Proves |
-|---|-----|--------|--------|
-| 1 | `exchange` | `sandbox/use-cases/01-exchange.sh` | RFC 8693 token exchange → WIMSE JWT |
-| 2 | `revocation` | `sandbox/use-cases/02-revocation.sh` | CAEP kill switch denies revoked identity |
-| 3 | `mcp` | `sandbox/use-cases/03-mcp-confused-deputy.sh` | MCP audience binding blocks wrong tool |
-| 4 | `federation` | `sandbox/use-cases/04-federation.sh` | Revocation hash + peer sync metrics |
-| 5 | `observability` | `sandbox/use-cases/05-observability.sh` | Health, JWKS, metrics, SSE |
+| # | ID | Proves |
+|---|-----|--------|
+| 1 | `exchange` | Platform credential → scoped WIMSE JWT (RFC 8693) |
+| 2 | `revocation` | CAEP kill switch denies revoked identity immediately |
+| 3 | `mcp` | Audience binding blocks confused deputy (wrong tool → 403) |
+| 4 | `federation` | Revocation hash + peer sync across fabrics |
+| 5 | `observability` | Health, JWKS, metrics, live SSE |
 
-Run individually: `./sandbox/run.sh exchange` or `./sandbox/run.sh 3`
+```bash
+./sandbox/run.sh exchange   # one scenario
+./sandbox/run.sh 3          # by number
+```
 
-Each use case prints `ok` / `fail` lines and points at a dashboard screenshot under `docs/screenshots/`.
+Scripts live in `sandbox/use-cases/`. Each prints `ok` / `fail` and references a dashboard screenshot under `docs/screenshots/`.
+
+## After the sandbox passes
+
+| Human goal | Doc |
+|------------|-----|
+| Wire an agent | [Token exchange](https://starfly.dev/1.0/docs/integrators/token-exchange/) |
+| Secure MCP tools | [MCP security](https://starfly.dev/1.0/docs/integrators/mcp/) |
+| Multi-protocol tools | [UTC](https://starfly.dev/1.0/docs/integrators/utc/) |
+| Watch the fabric | [Dashboard](https://starfly.dev/1.0/docs/integrators/dashboard/) |
 
 ## Agent rules
 
 - Set `STARFLY_URL` only when overriding the profile default.
-- Prefer `curl` + `jq` — scripts in `sandbox/use-cases/` are the canonical examples.
-- On failure: run `./sandbox/init.sh`, then retry one use case before `all`.
-- Do not expose lab URLs as public internet endpoints; lab is LAN-only unless tunneled.
-- Sacred invariants (document, do not violate in suggestions):
-  - **124ns exchange hot path** — no new sync deps on exchange pipeline
-  - **30ms revocation kill switch** — propagation latency is not negotiable
+- Prefer `curl` + `jq`; canonical examples are in `sandbox/use-cases/`.
+- On failure: `./sandbox/init.sh`, then retry one use case before `all`.
+- Lab URLs are LAN-only — never expose as public internet endpoints.
+- **Do not suggest** synchronous deps on the exchange pipeline or blocking hops on revocation.
+- Link to **public** paths only: `github.com/raygj/project-starfly-fabrics`, `starfly.dev` — never private monorepo paths.
 
-## Public docs surface
+## Public surface
 
-- Site: https://starfly.dev
-- Screenshots: `docs/screenshots/`
-- Future in-frame UI: `starfly.dev/play` will render this same manifest
+| Resource | URL |
+|----------|-----|
+| Docs hub | https://starfly.dev/1.0/docs/ |
+| Playground | https://starfly.dev/play/ |
+| OpenAPI | https://starfly.dev/api/ |
+| Repo | https://github.com/raygj/project-starfly-fabrics |

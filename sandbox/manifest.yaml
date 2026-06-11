@@ -6,8 +6,8 @@ bootstrap:
     description: Personal PEP on your laptop (recommended)
     url: http://localhost:8693
     steps:
-      - git clone https://github.com/starfly-fabrics/starfly.git
-      - cd starfly && make build
+      - git clone https://github.com/raygj/project-starfly-fabrics.git
+      - cd project-starfly-fabrics && make build-dev
       - STARFLY_STORAGE_PATH=/tmp/starfly-dev STARFLY_POLICY_BUNDLE_PATH=policies/dev ./bin/starfly --dev
     verify: GET /v1/sys/health
   lab:
