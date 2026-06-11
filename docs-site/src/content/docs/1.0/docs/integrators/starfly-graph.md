@@ -64,7 +64,7 @@ Writes enter **only** through the NATS consumer — never via API POST.
 
 ## Federation with design-time graph
 
-Runtime graph (Starfly) federates with design-time graph (CALM Forge):
+Runtime graph (Starfly) federates with the design-time graph in [CALM Forge](https://github.com/raygj/project-calm-forge):
 
 - Shared types: `Capability`, `Source`, `TrustDomain`
 - `manifests_as` is **computed at query time**, not stored
