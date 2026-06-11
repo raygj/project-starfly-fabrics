@@ -30,7 +30,7 @@ slug: 1.0/docs/ecosystem
 |-----------|---------------|--------|
 | **Starfly** | Exchange, revoke, MCP verify — the fabric core | **Shipped** — [this repo](https://github.com/raygj/project-starfly-fabrics) |
 | [Credential patterns](../integrators/credential-patterns.md) | SPIFFE, K8s, Vault, cloud WI feed exchange | Shipped |
-| [CALM Forge](calm-forge.md) | Design-time graph — what workloads *should* do | Partner |
+| [CALM Forge](calm-forge.md) | Design-time graph — what workloads *should* do | Partner — [project-calm-forge](https://github.com/raygj/project-calm-forge) |
 | [Starfly Graph](../integrators/starfly-graph.md) | Runtime memory — lineage, blast radius | Preview |
 | [Dashboard](../integrators/dashboard.md) | Human NOC — metrics, SSE, federation watch | Preview |
 | [Reflector](reflector.md) | eBPF senses — observe MCP/tool traffic on the platform | Preview — [workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector) |
