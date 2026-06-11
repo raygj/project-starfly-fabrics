@@ -1,89 +1,71 @@
 ---
 title: Starfly Graph
-description: Runtime identity knowledge graph — NATS JetStream consumer to FalkorDB. Zero impact on exchange or revocation hot paths.
+description: Query who did what — lineage, blast radius, and tool history from fabric events, without slowing exchange or revocation.
 slug: 1.0/docs/integrators/starfly-graph
 ---
 
-The **Starfly Graph** is the fabric's **memory** — a runtime knowledge graph built from events the PEP already publishes. It follows ADR-0031 and the shared ontology in ADR-0024.
+**Ask who an agent reached, through what delegation chain, and how fast revocation propagated — without adding latency to exchange or revocation.** Starfly Graph is the fabric's memory: a runtime knowledge graph built from events the PEP already publishes.
 
-It is **not** on the exchange or revocation hot paths.
+## Why it's worth your time
 
-## Design rule
+- **Answer investigation questions in seconds** — blast radius, lineage, and tool usage history instead of log archaeology.
+- **Safe by design** — a NATS consumer behind the PEP; if graph is slow or down, exchange and kill-switch keep running.
+- **Agent-queryable** — MCP tools and read-only REST for automation and IDE agents.
+
+## How it works
 
 ```
-Exchange / revocation  →  NATS JetStream  →  starfly-graph consumer  →  FalkorDB
-        ↑                         │
-   sacred paths                   └── fabric does not wait for graph
+PEP events  →  NATS JetStream  →  starfly-graph  →  FalkorDB
+     ↑                                    │
+ hot path                          fabric does not wait
 ```
 
-If `starfly-graph` is slow or offline:
+The graph subscribes to subjects the fabric already emits (`EXCHANGE.*`, `REVOCATION.*`, `DELEGATION.*`, `MCP.*`, …). Data enters only through that consumer — never via API POST.
 
-- Exchanges continue
-- Revocations propagate at kill-switch latency
-- JetStream buffers; graph catches up on recovery
+## What you can query
 
-The fabric does not know the graph exists. The graph knows the fabric exists.
+### MCP tools
 
-## What gets ingested
-
-| NATS subject | Graph effect (simplified) |
-|--------------|---------------------------|
-| `EXCHANGE.>` | Agent exchanged toward audience |
-| `REVOCATION.>` | Agent revoked, revocation event node |
-| `SIGNAL.>` | SSF/CAEP signal ingested |
-| `DELEGATION.>` | Delegation edge between agents |
-| `MCP.*` | Tool registration, verify decisions |
-| `FEDERATION.>` | Cross-unit sync metadata |
-
-Node types include `Agent`, `Exchange`, `Revocation`, `Delegation`, `Tool`, `ToolCall`, `BehavioralProfile`, `SignalEvent`, `FabricUnit`.
-
-## Query surfaces
-
-### MCP tools (for agents in the IDE)
-
-| Tool | Question it answers |
-|------|---------------------|
+| Tool | Answers |
+|------|---------|
 | `query_runtime` | What has this agent done? |
 | `query_blast_radius` | If compromised, what can it reach? |
-| `query_lineage` | Full delegation chain to root |
+| `query_lineage` | Delegation chain to root principal |
 | `query_revocation_timeline` | How fast did revocation propagate? |
-| `query_tool_usage` | Who calls this MCP tool and with what outcome? |
+| `query_tool_usage` | Who calls this tool, allow vs deny |
 
 ### REST (read-only)
 
-| Path | Purpose |
-|------|---------|
-| `GET /v1/graph/agents` | Agent inventory + stats |
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /v1/graph/agents` | Agent inventory |
 | `GET /v1/graph/agents/{id}/blast-radius` | Transitive reach |
 | `GET /v1/graph/agents/{id}/lineage` | Delegation chain |
-| `GET /v1/graph/tools` | Tool usage summary |
-| `GET /v1/graph/stats` | Node/edge counts, consumer lag |
-| `GET /v1/graph/query` | Parameterized Cypher (read-only) |
+| `GET /v1/graph/stats` | Node counts, consumer lag |
 
-Writes enter **only** through the NATS consumer — never via API POST.
+## Runtime + design-time
 
-## Federation with design-time graph
+Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https://github.com/raygj/project-calm-forge). Shared vocabulary (`Capability`, `Source`, `TrustDomain`); `manifests_as` is computed at query time, not stored.
 
-Runtime graph (Starfly) federates with the design-time graph in [CALM Forge](https://github.com/raygj/project-calm-forge):
-
-- Shared types: `Capability`, `Source`, `TrustDomain`
-- `manifests_as` is **computed at query time**, not stored
-
-## Dashboard vs graph
-
-| Surface | Role |
-|---------|------|
-| [Operations dashboard](dashboard.md) | Human NOC — metrics, SSE, topology |
+| Surface | Best for |
+|---------|----------|
+| [Operations dashboard](dashboard.md) | Human watch — metrics, SSE, topology |
 | **Starfly Graph** | Machine query — lineage, blast radius, shadow agents |
 
-Both are async consumers. Neither blocks exchange.
+## Code in this repo
+
+| Path | Status |
+|------|--------|
+| [`pkg/graph/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/graph) | Preview — library export pending |
+| [`cmd/starfly-graph/`](https://github.com/raygj/project-starfly-fabrics/tree/main/cmd/starfly-graph) | Preview — service binary pending |
 
 ## Operator checklist
 
-- [ ] Confirm NATS JetStream healthy on fabric unit
-- [ ] `GET /v1/graph/stats` or graph `/healthz` — consumer lag near zero
-- [ ] Revocation still tested via [sandbox](../../sandbox/run.sh) — graph optional for kill-switch proof
+- [ ] NATS JetStream healthy on the fabric unit
+- [ ] `GET /v1/graph/stats` — consumer lag near zero
+- [ ] Kill-switch proof via [sandbox](../../sandbox/run.sh) — graph optional for that test
 
-## Status
+## Related
 
-Graph service code is not in this public export yet. Treat as **integrator / operator** infrastructure — deploy from the Starfly operator workspace when ADR-0031 phases reach your environment.
+- [UTC](utc.md) — multi-protocol tool verification
+- [Documentation voice](../VOICE.md)

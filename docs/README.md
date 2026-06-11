@@ -7,7 +7,7 @@ Diátaxis-shaped docs for evaluators, integrators, and operators.
 | **Tutorial** | [Getting started](getting-started.md) |
 | **Explanation** | [Glossary](glossary.md) · [Trust domains](concepts/trust-domains.md) · [Exchange](concepts/exchange.md) · [Revocation](concepts/revocation.md) |
 | **How-to** | [Token exchange](integrators/token-exchange.md) · [MCP](integrators/mcp.md) · [UTC](integrators/utc.md) · [Dashboard](integrators/dashboard.md) · [Starfly Graph](integrators/starfly-graph.md) · [Sandbox](../sandbox/manifest.yaml) |
-| **Reference** | [OpenAPI](../api/openapi.yaml) · [AGENTS.md](../AGENTS.md) · [llms.txt](../public/llms.txt) |
+| **Reference** | [OpenAPI](../api/openapi.yaml) · [AGENTS.md](../AGENTS.md) · [Voice guide](VOICE.md) · [llms.txt](../public/llms.txt) |
 
 ## Quick paths
 
