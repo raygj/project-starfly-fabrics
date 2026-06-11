@@ -34,7 +34,7 @@ Avoid: ADR numbers, commune paths, "operator workspace," vendor names in committ
 |-------|---------|
 | *(none)* | Shipped in this repo |
 | **Preview** | Integrator doc is canonical; code stub or partial export |
-| **Partner** | External repo (e.g. CALM Forge) |
+| **Satellite** | Sibling repo in the Starfly Fabrics ecosystem (e.g. CALM Forge) |
 
 One badge per page max. No phase gates or sprint language in user-facing copy.
 

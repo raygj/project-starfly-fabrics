@@ -68,6 +68,6 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 ## Related
 
 - [Ecosystem overview](../ecosystem/index.md) — where Graph sits in the fabric
-- [CALM Forge](../ecosystem/calm-forge.md) — design-time graph partner
+- [CALM Forge](../ecosystem/calm-forge.md) — design-time graph satellite
 - [UTC](utc.md) — multi-protocol tool verification
 - [Documentation voice](../VOICE.md)

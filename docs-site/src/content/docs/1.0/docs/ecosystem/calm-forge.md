@@ -18,14 +18,16 @@ Starfly does not replace CALM Forge. Starfly mints WIMSE and records runtime eve
 
 | Graph | When | Store |
 |-------|------|-------|
-| **CALM Forge** | Design time | Partner repo (Kuzu local / scale-out) |
+| **CALM Forge** | Design time | Satellite repo (Kuzu local / scale-out) |
 | **Starfly Graph** | Runtime | Preview in Starfly export |
 
 Handshake and shared ontology: federated via ADR-0024 types — see [Starfly Graph integrator guide](../integrators/starfly-graph.md).
 
 ## Repository
 
-**Partner** — [github.com/raygj/project-calm-forge](https://github.com/raygj/project-calm-forge)
+**Satellite** — [github.com/raygj/project-calm-forge](https://github.com/raygj/project-calm-forge)
+
+Same fabric vision, separate repo — design-time graph and intent compilation.
 
 ## Related
 
