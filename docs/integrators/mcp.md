@@ -1,14 +1,31 @@
-# Integrator guide — MCP security
+---
+title: MCP security
+description: Stop the confused deputy — bind every MCP tool call to the right WIMSE token and resource URI.
+---
 
-Register MCP tools and verify that presented tokens match the tool's resource URI.
+**Stop agents from presenting a valid token for tool A to tool B.** Starfly registers MCP tools with a `resource_uri`, binds that value to `aud` on the WIMSE JWT, and returns **403** when they do not match — the confused-deputy fix for agentic tool calling.
 
-## Threat: confused deputy
+## Why it's worth your time
 
-An agent holds a valid token scoped to **tool A** and presents it to **tool B**. Without audience checks, tool B executes under A's authority.
+- **One check, every MCP call** — verify audience before the tool executes, not after an incident.
+- **Works with your existing exchange flow** — same RFC 8693 endpoint; `audience` must equal the tool's `resource_uri`.
+- **Visible in ops** — denials show on the [MCP Security dashboard tab](dashboard.md) and in audit.
 
-Starfly binds `aud` on the WIMSE JWT to the tool's `resource_uri` and returns **403** on mismatch.
+## How it works
 
-## Register tools
+```
+Register tool (resource_uri)  →  Exchange with audience = resource_uri  →  WIMSE JWT
+                                        ↓
+                              POST /v1/mcp/verify on each call
+                                        ↓
+                              200 match · 403 confused deputy
+```
+
+For multi-protocol tool servers, add [UTC](utc.md) middleware in front of handlers; PEP-side registration and verify stay the same.
+
+## Wire it up
+
+### 1. Register the tool
 
 ```bash
 curl -s -X POST "$STARFLY_URL/v1/mcp/tools" \
@@ -21,9 +38,9 @@ curl -s -X POST "$STARFLY_URL/v1/mcp/tools" \
   }' | jq
 ```
 
-List: `GET /v1/mcp/tools`
+List registered tools: `GET /v1/mcp/tools`
 
-## Exchange for a tool-scoped token
+### 2. Exchange for a tool-scoped token
 
 ```bash
 curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
@@ -36,9 +53,9 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq -r .access_token
 ```
 
-The `audience` **must** equal the tool's `resource_uri`.
+The `audience` **must** equal the tool's `resource_uri`. See [token exchange](token-exchange.md) for credential types and fields.
 
-## Verify a tool call
+### 3. Verify on each call
 
 ```bash
 curl -s -X POST "$STARFLY_URL/v1/mcp/verify" \
@@ -52,25 +69,30 @@ curl -s -X POST "$STARFLY_URL/v1/mcp/verify" \
 | Result | Meaning |
 |--------|---------|
 | HTTP 200 | Token audience matches tool |
-| HTTP 403 | Confused deputy — wrong tool or audience |
+| HTTP 403 | Wrong tool or audience — confused deputy blocked |
 
-## Revoke a compromised tool
+### 4. Revoke when compromised
 
-Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation concepts](../concepts/revocation.md).
+Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation](../concepts/revocation.md).
 
-## Sandbox proof
+## Prove it in the sandbox
 
 ```bash
 ./sandbox/run.sh mcp
 ```
 
-Expected: allow on `code-search`, 403 on `sql-admin` with the same token.
+Expected: allow on `code-search`, **403** on `sql-admin` with the same token.
 
-## Dashboard
+## Code in this repo
 
-MCP tool calls and policy denials appear on the MCP Security tab — see [screenshots](../screenshots/).
+| Path | Status |
+|------|--------|
+| [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp) | Shipped — registry, verify middleware, client |
+| [OpenAPI — MCP operations](https://starfly.dev/api/operations/tags/mcp/) | Reference |
 
 ## Related
 
 - [Token exchange](token-exchange.md)
+- [UTC](utc.md) — same identity on non-MCP wire shapes
 - [Glossary: MCP](../glossary.md#mcp-model-context-protocol)
+- [Documentation voice](../VOICE.md)

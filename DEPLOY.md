@@ -12,6 +12,14 @@ Operator runbook for **starfly.dev**.
 
 ## Deploy
 
+### CI (main branch)
+
+Pushes to `main` run `.github/workflows/ci.yml` — build tests, then `npm run deploy` to **starfly.dev**.
+
+**One-time setup:** add repository secret `CLOUDFLARE_API_TOKEN` (Workers edit + account read). Use the same token class as local `wrangler deploy`.
+
+### Manual
+
 ```bash
 npm install                 # wrangler at repo root
 cd docs-site && npm ci && cd ..
@@ -19,6 +27,10 @@ npm run deploy              # build Starlight + wrangler deploy
 ```
 
 Custom domain: **Workers & Pages → project-starfly-fabrics → Domains** → `starfly.dev`.
+
+## Observability
+
+Workers Logs are enabled in `wrangler.jsonc` (`observability.logs` — persist + invocation logs). View in **Workers & Pages → project-starfly-fabrics → Logs**. Top-level `observability.enabled` stays `false`; logging is driven by the nested `logs` block (matches dashboard config).
 
 ## Maintainer exports (private monorepo)
 

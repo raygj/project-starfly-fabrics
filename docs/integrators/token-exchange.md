@@ -1,17 +1,36 @@
-# Integrator guide — token exchange
+---
+title: Token exchange
+description: Turn any platform credential into a scoped WIMSE JWT in one RFC 8693 call — the front door to the fabric.
+---
 
-Wire an agent or service to Starfly's RFC 8693 endpoint.
+**Turn a platform credential into a scoped WIMSE JWT in one call** — the front door every agent and service uses before calling tools, APIs, or peers. Starfly implements RFC 8693 token exchange; what you put in `audience` becomes `aud` on the outbound token.
 
-## Discover the PEP
+## Why it's worth your time
+
+- **One endpoint for every inbound identity** — Kubernetes SA, SPIFFE, OIDC, MCP agent creds, and more map to the same exchange shape.
+- **Scoped by construction** — `audience` and optional `scope` narrow blast radius before the token leaves the PEP.
+- **Fast by design** — exchange stays on the hot path; nothing here blocks revocation or async observability.
+
+## How it works
+
+```
+Platform credential  →  POST /v1/exchange/token  →  WIMSE JWT (aud, td, scope, ttl)
+                              ↓
+                    downstream tool / API / verify
+```
+
+Locked fabric units (`locked: true` on health) reject exchange until unsealed.
+
+## Wire it up
+
+### 1. Discover the PEP
 
 ```bash
 export STARFLY_URL=http://localhost:8693   # or your fabric URL
 curl -sf "$STARFLY_URL/v1/sys/health" | jq .
 ```
 
-`locked: true` means the unit is sealed — exchanges are rejected until unseal.
-
-## Exchange request
+### 2. Exchange
 
 ```bash
 curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
@@ -25,16 +44,14 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq
 ```
 
-### Required fields
-
 | Field | Value |
 |-------|-------|
 | `grant_type` | `urn:ietf:params:oauth:grant-type:token-exchange` |
 | `subject_token` | Raw credential string |
-| `subject_token_type` | Credential type URI (see table) |
+| `subject_token_type` | Credential type URI (table below) |
 | `audience` | Target service — becomes `aud` on the WIMSE JWT |
 
-### Common `subject_token_type` values
+**Common `subject_token_type` values**
 
 | URI | Credential |
 |-----|------------|
@@ -43,9 +60,9 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
 | `urn:starfly:token-type:oidc` | OIDC access token |
 | `urn:starfly:token-type:agent-mcp` | MCP agent credential |
 
-Full list: [OpenAPI](../../api/openapi.yaml).
+Full list: [OpenAPI](https://starfly.dev/api/operations/exchangetoken/).
 
-## Response
+### 3. Verify what you got
 
 ```json
 {
@@ -56,39 +73,39 @@ Full list: [OpenAPI](../../api/openapi.yaml).
 }
 ```
 
-Verify with JWKS:
-
 ```bash
 curl -s "$STARFLY_URL/v1/identity/jwks" | jq
 ```
 
-## Trust domain and audience
+## Trust domain vs audience
 
 - **`td`** — inbound trust plane ([trust domains](../concepts/trust-domains.md))
-- **`aud`** — outbound target you requested
+- **`aud`** — outbound target you requested in exchange
 
-Do not use `aud` as a stand-in for trust domain configuration.
+Do not use `aud` as a stand-in for trust-domain configuration.
 
-## Agent identity (production)
+## Production patterns
 
-`POST /v1/identity/agent` issues bootstrap tokens for registered agents. In dev mode, stub JWTs suffice — see [getting started](../getting-started.md).
+**Agent identity** — `POST /v1/identity/agent` issues bootstrap tokens for registered agents. Dev mode accepts stub JWTs; see [getting started](../getting-started.md).
 
-Production fabrics may require mTLS or bearer auth on identity endpoints.
+**Execution-scoped tokens** — bind a token to a specific HTTP action and payload hash via `execution_scope` (~30s TTL). Field definitions in [OpenAPI](https://starfly.dev/api/operations/exchangetoken/).
 
-## Execution-scoped tokens
+**Agent bootstrap (Cursor / Claude Code)**
 
-Bind a token to a specific HTTP action and payload hash via `execution_scope` on the exchange request. Shorter TTL (~30s). See OpenAPI for field definitions.
-
-## Agent bootstrap
-
-For Cursor / Claude Code:
-
-1. Read [AGENTS.md](../../AGENTS.md)
+1. Read [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
 2. `export STARFLY_PROFILE=local && ./sandbox/init.sh`
 3. `./sandbox/run.sh exchange`
 
+## Code in this repo
+
+| Path | Status |
+|------|--------|
+| [`pkg/exchange/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/exchange) | Shipped — exchange pipeline |
+| [`pkg/identity/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/identity) | Shipped — credential adapters |
+
 ## Related
 
-- [MCP integration](mcp.md)
+- [MCP security](mcp.md) — tool-scoped `audience`
 - [Exchange concepts](../concepts/exchange.md)
-- [Glossary](../glossary.md)
+- [Revocation](../concepts/revocation.md)
+- [Documentation voice](../VOICE.md)
