@@ -1,18 +1,24 @@
 ---
 title: Getting started
+description: Running PEP and first WIMSE JWT in 15 minutes — no cluster required.
 ---
 
-# Getting started
+**In about 15 minutes you will have a running Starfly fabric unit and your first scoped WIMSE JWT** — proof that exchange, policy, and signing work on your laptop before you wire agents or tools.
 
-Clone to first WIMSE JWT exchange in under 15 minutes.
+## What you'll prove
+
+- Starfly boots in dev mode and answers health checks
+- A platform credential exchanges for a WIMSE JWT with `aud`, `td`, and `exp`
+- Metrics and live events stream from the PEP
+- Sandbox scripts replay exchange, revocation, and MCP scenarios
+
+No Kubernetes required for this path.
 
 ## Prerequisites
 
 - Go 1.25+ (`go version`)
 - curl and jq
 - Make
-
-No Kubernetes cluster required for dev mode.
 
 ## 1. Clone and build
 
@@ -77,16 +83,16 @@ curl -s -X POST http://localhost:8693/v1/exchange/token \
 
 In dev mode, any parseable JWT is accepted against the synthetic `dev.local` [trust domain](concepts/trust-domains.md).
 
-## 6. Decode the WIMSE JWT
+## 6. Read the WIMSE JWT
 
-Pipe `.access_token` through base64 decode on the payload segment, or use the [sandbox](../sandbox/run.sh):
+Pipe `.access_token` through base64 decode on the payload segment, or use the sandbox:
 
 ```bash
 ./sandbox/init.sh
 ./sandbox/run.sh exchange
 ```
 
-Key claims: `sub`, `aud`, `td` (trust domain), `exp`.
+Key claims: `sub`, `aud`, `td` (trust domain), `exp`. Deeper dive: [exchange concepts](concepts/exchange.md).
 
 ## 7. Metrics and live events
 
@@ -95,15 +101,17 @@ curl -s http://localhost:8693/metrics | grep starfly_exchange
 curl -N http://localhost:8693/v1/events
 ```
 
-## 8. Sandbox use cases
+These same streams power the [operations dashboard](integrators/dashboard.md) when deployed.
 
-Five proof scripts (no Go rebuild required against a running PEP):
+## 8. Run the proof scripts
+
+Five scenarios — no Go rebuild required against a running PEP:
 
 ```bash
 ./sandbox/run.sh all
 ```
 
-Or interactive demos with narration:
+Narrated demos:
 
 ```bash
 ./demos/01-token-exchange.sh
@@ -111,12 +119,19 @@ Or interactive demos with narration:
 ./demos/03-confused-deputy.sh
 ```
 
+Manifest and agent bootstrap: [`sandbox/`](../sandbox/) · [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
+
 ## What's next
 
-| Goal | Read |
-|------|------|
-| Terms and vocabulary | [glossary.md](glossary.md) |
-| Integrate an agent | [integrators/token-exchange.md](integrators/token-exchange.md) |
-| MCP tool security | [integrators/mcp.md](integrators/mcp.md) |
+| Goal | Go here |
+|------|---------|
+| Vocabulary | [Glossary](glossary.md) |
+| Wire an agent | [Token exchange](integrators/token-exchange.md) |
+| MCP tool security | [MCP security](integrators/mcp.md) |
+| Multi-protocol tools | [UTC](integrators/utc.md) |
 | Playground UI | [starfly.dev/play](https://starfly.dev/play) |
-| API contract | [api/openapi.yaml](../api/openapi.yaml) |
+| API contract | [OpenAPI](https://starfly.dev/api/) |
+
+## Related
+
+- [Documentation voice](VOICE.md)

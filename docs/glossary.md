@@ -1,24 +1,43 @@
-# Glossary
+---
+title: Glossary
+description: Starfly terms in plain language — the vocabulary for docs, agents, and the ops dashboard.
+---
 
-Canonical terms for Starfly docs, the dashboard AI bar, and agent tooling.
+**Shared vocabulary for humans, agents, and the dashboard AI bar.** If two terms sound alike — trust domain vs audience, fabric vs unit — start here before diving into integrator guides.
+
+## Quick reference
+
+| Term | One-line meaning |
+|------|------------------|
+| [Trust domain](#trust-domain) | Inbound identity plane (`td`) |
+| [Audience](#audience) | Outbound target (`aud`) |
+| [Token exchange](#token-exchange) | Credential in → WIMSE JWT out |
+| [Revocation](#revocation--kill-switch) | Immediate deny for compromised IDs |
+| [PEP](#pep-policy-enforcement-point) | Starfly at runtime |
+| [UTC](#utc-universal-tool-calling-layer) | One verifier, many protocols |
+
+---
 
 ## Trust domain
 
-The **issuer-side identity boundary**. A trust domain names *who Starfly believes issued the incoming credential* and *which signing keys and policy bundle apply* on the way in.
+**Why you care:** Starfly must know *which platform credential* you presented before it mints a JWT.
 
-- Configured in Starfly (`trustDomains` in Helm values or dev config).
+The issuer-side identity boundary. Names who Starfly believes issued the inbound credential and which validators and policy bundle apply.
+
+- Configured in fabric config (dev: synthetic `dev.local`; production: Helm or [Terraform](https://starfly.dev/terraform/)).
 - Appears as the `td` claim on issued WIMSE JWTs.
-- Example: `dev.local` (synthetic dev mode), `sandbox.starfly.local` (lab fabric).
 
-**Not the same as audience.** See below.
+Deep dive: [trust domains](concepts/trust-domains.md).
 
 ## Audience
 
-The **downstream resource** a token is scoped to reach — an API URL, MCP tool resource URI, or service identifier.
+**Why you care:** A valid token should only work at the resource you scoped — not at a lookalike tool or API.
 
-- Requested at exchange time via the `audience` field (RFC 8693).
-- Appears as the `aud` claim on the issued WIMSE JWT.
-- MCP tools bind `aud` to a single `resource_uri`; presenting the token elsewhere is a [confused deputy](integrators/mcp.md) risk.
+The downstream resource a token may reach — API URL, MCP `resource_uri`, or service identifier.
+
+- Requested at exchange via the `audience` field (RFC 8693).
+- Appears as the `aud` claim on the issued JWT.
+- MCP binds `aud` to one tool; using it elsewhere is a [confused deputy](integrators/mcp.md).
 
 | Term | Question it answers |
 |------|---------------------|
@@ -27,46 +46,77 @@ The **downstream resource** a token is scoped to reach — an API URL, MCP tool 
 
 ## Fabric unit
 
-One running Starfly PEP instance — a StatefulSet pod, local dev binary, or lab sandbox. Identified by `unit_id` in `/v1/sys/health`.
+One running Starfly PEP — StatefulSet pod, local `bin/starfly`, or lab sandbox. Identified by `unit_id` in `/v1/sys/health`.
 
 ## Fabric
 
-A logical security domain: one or more fabric units sharing policy, revocation state, and (optionally) federation peers. Lab example: `fabric-alpha`, `fabric-sandbox`.
+A logical security domain: one or more fabric units sharing policy, revocation state, and optional federation peers. Lab examples: `fabric-alpha`, `fabric-sandbox`.
 
 ## PEP (Policy Enforcement Point)
 
-Starfly's runtime role. Validates credentials, evaluates OPA policy, mints WIMSE JWTs, enforces MCP tool audience, ingests CAEP/SSF signals, and maintains the revocation index.
+**Why you care:** This is what you deploy — the runtime that secures agents without replacing your IdP.
 
-Starfly is **not** an identity provider — it routes identity: any supported credential in, scoped JWT out.
+Starfly's runtime role: validate credentials, evaluate OPA policy, mint WIMSE JWTs, verify MCP audience, ingest CAEP/SSF signals, maintain the revocation index.
+
+Starfly is **not** an identity provider. It routes identity: supported credential in, scoped JWT out.
 
 ## WIMSE JWT
 
-Workload Identity in Multi-System Environments — the issued token profile. Short-lived, audience-bound, signed by Starfly's keys (JWKS at `/v1/identity/jwks`).
+Workload Identity in Multi-System Environments — the issued token profile. Short-lived, audience-bound, signed by Starfly's keys. Verify via `GET /v1/identity/jwks`.
 
 ## Token exchange
 
-RFC 8693 flow at `POST /v1/exchange/token`. Trade a platform credential (K8s SA, OIDC, SPIFFE, stub JWT in dev) for a WIMSE JWT.
+RFC 8693 at `POST /v1/exchange/token`. Trade a platform credential (K8s SA, OIDC, SPIFFE, stub JWT in dev) for a WIMSE JWT.
+
+Guide: [token exchange integrator](integrators/token-exchange.md) · Concepts: [exchange](concepts/exchange.md).
 
 ## Delegation
 
-An agent operating on behalf of another principal. Reflected in delegation depth and chain claims on issued tokens. Visible on the dashboard Delegation tab.
+An agent acting on behalf of another principal. Reflected in delegation depth and chain claims on issued tokens. Visible on the dashboard Delegation tab.
 
 ## Revocation / kill switch
 
-CAEP `session-revoked` (and related) signals at `POST /v1/signals/events`. Starfly updates a local revocation index and propagates to peers. Target: **deny within 30ms** on the hot path.
+**Why you care:** Compromise response cannot wait for JWT expiry.
+
+CAEP `session-revoked` and related signals at `POST /v1/signals/events`. Starfly updates a local revocation index and propagates to peers. Target: deny on the exchange path within the documented ~30ms budget.
+
+Concepts: [revocation](concepts/revocation.md) · Try: `./sandbox/run.sh revocation`
 
 ## Federation
 
-Cross-fabric revocation sync without shared databases. Peers exchange revocation hashes (`GET /v1/federation/revocation-hash`) and relay signals over configured transports.
+Cross-fabric revocation sync without shared databases. Peers exchange hashes (`GET /v1/federation/revocation-hash`) and relay signals over configured transports.
 
 ## SET / CAEP / SSF
 
-Shared Signals Framework events — standardized security event tokens (e.g. OpenID CAEP). Starfly ingests them at `/v1/signals/events` and exposes SSF discovery at `/.well-known/ssf-configuration`.
+Shared Signals Framework — standardized security event tokens (e.g. OpenID CAEP). Ingested at `/v1/signals/events`; discovery at `/.well-known/ssf-configuration`.
+
+Reference: [OpenAPI — signals](https://starfly.dev/api/operations/tags/signals/).
 
 ## MCP (Model Context Protocol)
 
-Tool-calling protocol for AI agents. Starfly registers tools (`POST /v1/mcp/tools`) and verifies calls (`POST /v1/mcp/verify`) with audience binding.
+Tool-calling protocol for AI agents. Starfly registers tools and verifies calls with audience binding.
+
+Guide: [MCP security](integrators/mcp.md) · Code: [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp)
+
+## UTC (Universal Tool-Calling Layer)
+
+**Why you care:** Your agents won't all speak MCP — UTC keeps one identity story across wire formats.
+
+Protocol-agnostic middleware: adapters normalize MCP, HTTP, A2A (and more) into one verification path.
+
+Guide: [UTC](integrators/utc.md) · Code: [`pkg/toolcall/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall)
+
+## Starfly Graph
+
+Runtime identity knowledge graph — lineage, blast radius, tool history from fabric events. Async NATS consumer; does not block exchange.
+
+Guide: [Starfly Graph](integrators/starfly-graph.md)
 
 ## Behavioral profile / Soul
 
-Runtime graph of agent behavior computed asynchronously (not on the exchange hot path). Surfaced on the dashboard Soul tab.
+Runtime behavior summary computed asynchronously (not on the exchange hot path). Surfaced on the dashboard Soul tab.
+
+## Related
+
+- [Getting started](getting-started.md)
+- [Documentation voice](VOICE.md)
