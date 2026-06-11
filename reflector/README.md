@@ -1,6 +1,6 @@
 # Reflector (eBPF platform senses)
 
-> **Status:** Preview — export pending.
+> **Status:** Preview — code in [workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector).
 
 ## Why this exists
 
@@ -13,4 +13,4 @@ Observe MCP and tool traffic at the host — complement Starfly PEP audit with k
 
 ## Code
 
-DaemonSet and sidecar sources not in this export yet.
+[github.com/raygj/workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector)

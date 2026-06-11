@@ -27,7 +27,7 @@
 - /1.0/docs/glossary/ — trust domain vs audience, full vocabulary
 - /1.0/docs/ecosystem/ — fabric map (Starfly PEP + optional companions)
 - /1.0/docs/ecosystem/calm-forge/ — design-time graph (partner repo)
-- /1.0/docs/ecosystem/reflector/ — eBPF platform senses (Preview)
+- /1.0/docs/ecosystem/reflector/ — eBPF platform senses (Preview; github.com/raygj/workload-ebpf-reflector)
 - /1.0/docs/ecosystem/ssf-relay/ — CAEP/SSF fan-out (Preview)
 - /1.0/docs/ecosystem/reasoner/ — design vs runtime coherence (Preview)
 - /1.0/docs/ecosystem/lpa-crypto-heart/ — signed policy bundles (Preview)

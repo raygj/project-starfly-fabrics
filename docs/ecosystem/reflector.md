@@ -23,11 +23,11 @@ Agent → tool call → platform network
 
 Reflector does not mint WIMSE. Starfly does not load eBPF programs. Sovereign concerns.
 
-## Status
+## Repository
 
-**Preview** — DaemonSet and sidecar export pending in this repository.
+**Preview** — [github.com/raygj/workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector)
 
-Code stub: [`reflector/`](https://github.com/raygj/project-starfly-fabrics/tree/main/reflector)
+eBPF-based SPIFFE identity observation and enforcement for Kubernetes workloads — zero agent modification, wire speed. Lives in its own repo; Starfly fabrics docs link here for the ecosystem map.
 
 ## Related
 

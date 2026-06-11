@@ -33,7 +33,7 @@ slug: 1.0/docs/ecosystem
 | [CALM Forge](calm-forge.md) | Design-time graph — what workloads *should* do | Partner |
 | [Starfly Graph](../integrators/starfly-graph.md) | Runtime memory — lineage, blast radius | Preview |
 | [Dashboard](../integrators/dashboard.md) | Human NOC — metrics, SSE, federation watch | Preview |
-| [Reflector](reflector.md) | eBPF senses — observe MCP/tool traffic on the platform | Preview |
+| [Reflector](reflector.md) | eBPF senses — observe MCP/tool traffic on the platform | Preview — [workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector) |
 | [SSF Relay](ssf-relay.md) | Motor layer — fan CAEP/SET to enterprise sinks | Preview |
 | [Reasoner](reasoner.md) | Coherence — design vs runtime drift, shadow agents | Preview |
 | [LPA Crypto Heart](lpa-crypto-heart.md) | Signed policy bundles and provenance heartbeats | Preview |
