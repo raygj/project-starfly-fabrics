@@ -1,51 +1,61 @@
 ---
 title: Revocation
+description: Kill compromised credentials in milliseconds — surgical revocation without stopping the fabric.
 ---
 
-# Revocation
+**When a credential is compromised, waiting for expiry is not a plan.** Starfly maintains a revocation index fed by CAEP/SSF signals and denies exchanges immediately — surgical, not scorched-earth.
 
-When a credential is compromised, expiry is too slow. Starfly maintains a **revocation index** updated by CAEP/SSF signals and denies exchanges immediately.
+## Why it matters
 
-## The 30ms invariant
+- **Kill switch, not cooldown** — revoked workloads fail exchange on the next request, not at token expiry.
+- **Surgical scope** — revoke one agent or tool; clean identities keep exchanging.
+- **Federation-aware** — peers sync revocation state without a shared database.
 
-Revocation propagation is the **kill switch**. The fabric must deny revoked identities on the exchange hot path within the documented latency budget (~30ms index lookup). Do not introduce blocking hops on the revocation path.
-
-## Signal flow
+## How it works
 
 ```
 CAEP session-revoked  →  POST /v1/signals/events  →  policy  →  revocation index
                                                               ↓
-                                                    NATS flash → federation peers
+                                                    NATS → federation peers
 ```
 
 1. Operator or IdP sends a CAEP event naming the subject (`sub_id.uri`).
 2. Starfly accepts (202) after policy check.
-3. Index updated — subsequent exchanges for that workload ID return 403.
-4. Federation relay propagates hash/state to peers.
+3. Index updates — subsequent exchanges for that workload return **403**.
+4. Federation relay propagates hash and state to peers.
 
-## Surgical, not scorched earth
+The revocation lookup stays on the fast path (~30ms budget in production fabrics). Do not add blocking hops between signal ingestion and index update.
 
-Revocation targets a **workload identity** or tool — not the entire fabric. Clean agents continue exchanging.
+## Federation without shared state
+
+Cross-fabric sync uses revocation hashes — no central DB:
+
+```bash
+curl -s "$STARFLY_URL/v1/federation/revocation-hash" | jq
+```
+
+Lab profile: `STARFLY_PROFILE=lab ./sandbox/run.sh federation`
 
 ## Try it
 
 ```bash
 ./sandbox/run.sh revocation
-# or narrated:
-./demos/02-real-time-revocation.sh
 ```
 
-## Federation
+Narrated demo: [`demos/02-real-time-revocation.sh`](https://github.com/raygj/project-starfly-fabrics/blob/main/demos/02-real-time-revocation.sh)
 
-Cross-fabric sync uses revocation hashes — no shared DB:
+## Key endpoints
 
-```bash
-curl -s http://localhost:8693/v1/federation/revocation-hash | jq
-```
+| Path | Purpose |
+|------|---------|
+| `POST /v1/signals/events` | Ingest CAEP/SSF events |
+| `GET /v1/federation/revocation-hash` | Peer sync fingerprint |
 
-Lab sandbox peers to `fabric-alpha` for federation demos (`STARFLY_PROFILE=lab ./sandbox/run.sh federation`).
+Full reference: [OpenAPI — signals](https://starfly.dev/api/operations/tags/signals/).
 
 ## Related
 
+- [Exchange](exchange.md)
 - [Glossary: revocation](../glossary.md#revocation--kill-switch)
-- [CAEP ingestion](../api/openapi.yaml)
+- [Operations dashboard](../integrators/dashboard.md) — watch CAEP cascade live
+- [Documentation voice](../VOICE.md)

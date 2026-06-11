@@ -1,46 +1,58 @@
 ---
-title: Trust Domains
+title: Trust domains
+description: The inbound identity plane — how Starfly knows which credential to trust before minting a JWT.
 ---
 
-# Trust domains
+**Before Starfly mints a JWT, it must know which identity plane the credential came from.** Trust domains are that inbound boundary — the validator, policy slice, and subject namespace that apply to the credential you present.
 
-A trust domain is Starfly's name for the **issuer-side boundary** — the zone of identity Starfly trusts when validating an incoming credential.
+## Why it matters
 
-## Why it exists
-
-Workloads arrive with credentials from many platforms: Kubernetes service accounts, OIDC issuers, SPIFFE trust domains, cloud IAM. Starfly must know **which validator, which policy slice, and which subject namespace** apply before minting a WIMSE JWT.
-
-The trust domain answers: *"This credential belongs to identity plane X."*
+- **Many platforms, one fabric** — K8s service accounts, OIDC issuers, SPIFFE, cloud IAM each map to a trust domain.
+- **Prevents category errors** — trust domain (`td`) answers *who sent this*; audience (`aud`) answers *who may receive the JWT*.
+- **MCP security depends on it** — same trust domain, different tools still need different `aud` values.
 
 ## Trust domain vs audience
 
-These are the most confused pair in NHI docs.
+The most confused pair in NHI work:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  INBOUND (trust domain)          OUTBOUND (audience)        │
 │  "Who sent this credential?"     "Who may receive this JWT?" │
 │  td claim on issued JWT          aud claim on issued JWT     │
-│  Configured in Starfly           Requested at exchange time  │
+│  Fabric configuration            Requested at exchange time  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Example:** A K8s SA from cluster `prod` exchanges for audience `https://analytics.example.com`.
+**Example:** A K8s service account from cluster `prod` exchanges for audience `https://analytics.example.com`.
 
-- Trust domain: maps to how Starfly validated the SA (cluster trust, namespace, SA name).
-- Audience: the analytics API — the only downstream resource this JWT targets.
+- **Trust domain** — how Starfly validated the SA (cluster trust, namespace, name).
+- **Audience** — the analytics API; the only downstream resource this JWT targets.
 
-Conflating them breaks MCP security: a token with `aud` for tool A must not work at tool B even if both sit in the same trust domain.
+A token with `aud` for tool A must not work at tool B — even when both tools sit in the same trust domain. That is the confused-deputy fix in [MCP security](../integrators/mcp.md).
 
 ## Dev mode
 
-`./bin/starfly --dev` uses synthetic `dev.local`. Stub JWTs in [getting started](../getting-started.md) exercise exchange without a real IdP.
+```bash
+./bin/starfly --dev
+```
 
-## Configuration
+Uses synthetic `dev.local`. Stub JWTs in [getting started](../getting-started.md) exercise exchange without a real IdP.
 
-Production fabrics declare trust domains in Helm values (`starfly.trustDomains`). Each enabled domain activates validators and policy paths for credentials from that plane.
+## Production configuration
+
+Declare trust domains in fabric configuration (Helm values or [Terraform provider](https://starfly.dev/terraform/)). Each enabled domain activates validators and policy paths for credentials from that plane.
+
+## Try it
+
+```bash
+./sandbox/run.sh exchange
+```
+
+Watch `td` on the issued JWT — [token exchange integrator guide](../integrators/token-exchange.md).
 
 ## Related
 
 - [Glossary: trust domain vs audience](../glossary.md#audience)
-- [Token exchange integrator guide](../integrators/token-exchange.md)
+- [Exchange](exchange.md)
+- [Documentation voice](../VOICE.md)
