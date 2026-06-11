@@ -16,7 +16,14 @@ Operator runbook for **starfly.dev**.
 
 Pushes to `main` run `.github/workflows/ci.yml` — build tests, then `npm run deploy` to **starfly.dev**.
 
-**One-time setup:** add repository secret `CLOUDFLARE_API_TOKEN` (Workers edit + account read). Use the same token class as local `wrangler deploy`.
+**One-time setup:** add repository secret `CLOUDFLARE_API_TOKEN`.
+
+| Token | Use |
+|-------|-----|
+| **CI token** | GitHub Actions — Workers Scripts Edit + Account Read, **no IP restriction** |
+| **Local 8hr token** | Laptop `wrangler deploy` only — IP-filtered tokens fail in CI with error `9109` |
+
+Create the CI token in Cloudflare Dashboard → My Profile → API Tokens → Create Token → Edit Cloudflare Workers template.
 
 ### Manual
 
