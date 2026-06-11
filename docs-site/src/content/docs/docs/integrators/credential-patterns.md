@@ -83,6 +83,22 @@ Pair with [MCP security](mcp.md) when `audience` is a tool `resource_uri`.
 
 ---
 
+## Vault PEP with external PDP
+
+**Why it's worth your time:** You already run a credential vault at scale — use it as the **Policy Enforcement Point** without writing a Sentinel policy per agent. One Endpoint Governing Policy calls OPA (or your engine); Vault issues scoped, short-lived tokens or it does not.
+
+See the full pattern: [Vault as PEP with external PDP](vault-pep-pdp.md).
+
+```
+Agent ──► Vault auth ──► Sentinel (one rule) ──► OPA PDP ──► allow / deny
+                              │
+                              └──► scoped token + delegation metadata
+```
+
+Compose with Starfly when the fabric needs WIMSE — same RFC 8693 delegation vocabulary, different enforcement boundary.
+
+---
+
 ## Vault OIDC plugin (Preview)
 
 **Why it's worth your time:** Some targets **only** accept tokens from Azure AD, Okta, or Google — not your fabric JWKS. A credential vault can broker that IdP token while Starfly still governs fabric-side access.
@@ -104,7 +120,7 @@ Workload ──► Vault ──► OIDC plugin ──► IdP access token
 
 **Status:** Preview — plugin lives in operator workspace; public export stub: [`providers/oidc-engine/`](https://github.com/raygj/project-starfly-fabrics/tree/main/providers/oidc-engine).
 
-FIAM signaling (preflight + claim enrichment) sits **before** the IdP request — analogous in spirit to OPA on the Starfly side, but on the vault path.
+FIAM signaling (preflight + claim enrichment) sits **before** the IdP request — shaping PDP input on the vault path, same determinism boundary as [Vault PEP → OPA](vault-pep-pdp.md).
 
 ---
 
@@ -132,6 +148,7 @@ Full enum: [OpenAPI — exchange](https://starfly.dev/api/operations/exchangetok
 
 ## Related
 
+- [Vault PEP / PDP](vault-pep-pdp.md) — Sentinel → OPA at issuance
 - [Ecosystem overview](../ecosystem/index.md) — full fabric map
 - [Token exchange](token-exchange.md) — wire-up guide
 - [Glossary: WIMSE JWT](../glossary.md#wimse-jwt)

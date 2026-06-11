@@ -36,6 +36,7 @@
 - /1.0/docs/concepts/revocation/ — kill switch
 - /1.0/docs/concepts/trust-domains/ — inbound identity plane
 - /1.0/docs/integrators/token-exchange/ — RFC 8693 integrator guide
+- /1.0/docs/integrators/vault-pep-pdp/ — Vault PEP, Sentinel → OPA PDP, agent delegation
 - /1.0/docs/integrators/credential-patterns/ — SPIFFE, K8s, Vault OIDC, cloud WI → WIMSE
 - /1.0/docs/integrators/mcp/ — confused deputy mitigation
 - /1.0/docs/integrators/utc/ — multi-protocol tool verification

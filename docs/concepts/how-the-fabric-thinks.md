@@ -47,7 +47,9 @@ Workload ──► Vault PEP (Sentinel → OPA) ──► secret / IdP token
 
 Each PEP fails closed when its PDP is unreachable. None of them call an LLM.
 
-See [Credential patterns](../integrators/credential-patterns.md) for how Vault and Starfly compose upstream.
+Vault implements this with **one Sentinel rule** and an HTTP call to OPA — not thousands of per-agent policies. Guardrails (TTL ceiling, delegation depth cap, scope monotonicity) stay in Sentinel as absolute boundaries; intent and context live in Rego. See [Vault as PEP with external PDP](../integrators/vault-pep-pdp.md).
+
+See [Credential patterns](../integrators/credential-patterns.md) for the full upstream composition with Starfly.
 
 ## The autonomic loop
 

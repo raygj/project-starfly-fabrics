@@ -74,6 +74,7 @@ export default defineConfig({
 					label: 'Integrators',
 					items: [
 						{ label: 'Token exchange', slug: 'docs/integrators/token-exchange' },
+						{ label: 'Vault PEP / PDP', slug: 'docs/integrators/vault-pep-pdp' },
 						{ label: 'MCP security', slug: 'docs/integrators/mcp' },
 						{ label: 'UTC (multi-protocol tools)', slug: 'docs/integrators/utc' },
 						{ label: 'Operations dashboard', slug: 'docs/integrators/dashboard' },

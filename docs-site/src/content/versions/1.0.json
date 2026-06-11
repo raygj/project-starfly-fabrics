@@ -83,6 +83,10 @@
           "slug": "docs/integrators/token-exchange"
         },
         {
+          "label": "Vault PEP / PDP",
+          "slug": "docs/integrators/vault-pep-pdp"
+        },
+        {
           "label": "MCP security",
           "slug": "docs/integrators/mcp"
         },
