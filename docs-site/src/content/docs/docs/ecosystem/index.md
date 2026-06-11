@@ -51,8 +51,9 @@ description: Starfly is the identity PEP — companions sense, remember, relay, 
 ## Start here
 
 1. [Getting started](../getting-started.md) — first WIMSE JWT in 15 minutes  
-2. [Integrators](../integrators/token-exchange.md) — wire agents and tools  
-3. Pick **one** companion when you have a concrete need — not all at once  
+2. [How the fabric thinks](../concepts/how-the-fabric-thinks.md) — determinism, graphs, autonomic loop  
+3. [Integrators](../integrators/token-exchange.md) — wire agents and tools  
+4. Pick **one** companion when you have a concrete need — not all at once  
 
 ## Related
 
