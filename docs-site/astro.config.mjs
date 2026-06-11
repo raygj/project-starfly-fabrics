@@ -58,10 +58,21 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Ecosystem',
+					items: [
+						{ label: 'Overview', slug: 'docs/ecosystem' },
+						{ label: 'CALM Forge', slug: 'docs/ecosystem/calm-forge' },
+						{ label: 'Credential patterns', slug: 'docs/integrators/credential-patterns' },
+						{ label: 'Reflector', slug: 'docs/ecosystem/reflector' },
+						{ label: 'SSF Relay', slug: 'docs/ecosystem/ssf-relay' },
+						{ label: 'Reasoner', slug: 'docs/ecosystem/reasoner' },
+						{ label: 'LPA Crypto Heart', slug: 'docs/ecosystem/lpa-crypto-heart' },
+					],
+				},
+				{
 					label: 'Integrators',
 					items: [
 						{ label: 'Token exchange', slug: 'docs/integrators/token-exchange' },
-						{ label: 'Credential patterns', slug: 'docs/integrators/credential-patterns' },
 						{ label: 'MCP security', slug: 'docs/integrators/mcp' },
 						{ label: 'UTC (multi-protocol tools)', slug: 'docs/integrators/utc' },
 						{ label: 'Operations dashboard', slug: 'docs/integrators/dashboard' },

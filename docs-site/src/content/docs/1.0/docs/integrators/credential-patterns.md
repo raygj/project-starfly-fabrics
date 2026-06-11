@@ -133,6 +133,7 @@ Full enum: [OpenAPI — exchange](https://starfly.dev/api/operations/exchangetok
 
 ## Related
 
+- [Ecosystem overview](../ecosystem/index.md) — full fabric map
 - [Token exchange](token-exchange.md) — wire-up guide
 - [Glossary: WIMSE JWT](../glossary.md#wimse-jwt)
 - [Documentation voice](../VOICE.md)
