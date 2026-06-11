@@ -46,6 +46,10 @@
           "slug": "docs/integrators/token-exchange"
         },
         {
+          "label": "Credential patterns",
+          "slug": "docs/integrators/credential-patterns"
+        },
+        {
           "label": "MCP security",
           "slug": "docs/integrators/mcp"
         },

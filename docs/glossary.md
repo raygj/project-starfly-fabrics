@@ -64,6 +64,8 @@ Starfly is **not** an identity provider. It routes identity: supported credentia
 
 Workload Identity in Multi-System Environments — the issued token profile. Short-lived, audience-bound, signed by Starfly's keys. Verify via `GET /v1/identity/jwks`.
 
+Starfly **issues** WIMSE; SPIFFE SVIDs, K8s tokens, and IdP tokens are common **inputs** to exchange — not alternate WIMSE implementations. See [credential patterns](integrators/credential-patterns.md).
+
 ## Token exchange
 
 RFC 8693 at `POST /v1/exchange/token`. Trade a platform credential (K8s SA, OIDC, SPIFFE, stub JWT in dev) for a WIMSE JWT.

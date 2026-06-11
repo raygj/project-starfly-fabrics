@@ -61,6 +61,7 @@ export default defineConfig({
 					label: 'Integrators',
 					items: [
 						{ label: 'Token exchange', slug: 'docs/integrators/token-exchange' },
+						{ label: 'Credential patterns', slug: 'docs/integrators/credential-patterns' },
 						{ label: 'MCP security', slug: 'docs/integrators/mcp' },
 						{ label: 'UTC (multi-protocol tools)', slug: 'docs/integrators/utc' },
 						{ label: 'Operations dashboard', slug: 'docs/integrators/dashboard' },

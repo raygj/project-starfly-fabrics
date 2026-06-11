@@ -103,8 +103,15 @@ Do not use `aud` as a stand-in for trust-domain configuration.
 | [`pkg/exchange/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/exchange) | Shipped — exchange pipeline |
 | [`pkg/identity/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/identity) | Shipped — credential adapters |
 
+## Subject credentials
+
+What you pass as `subject_token` depends on the platform — SPIFFE/SPIRE, Kubernetes SA, cloud workload identity, or an IdP bridge. Starfly always outputs WIMSE.
+
+→ [Credential patterns](credential-patterns.md)
+
 ## Related
 
+- [Credential patterns](credential-patterns.md) — SPIFFE, K8s, Vault OIDC, cloud WI
 - [MCP security](mcp.md) — tool-scoped `audience`
 - [Exchange concepts](../concepts/exchange.md)
 - [Revocation](../concepts/revocation.md)
