@@ -25,9 +25,9 @@ Starfly is always the **outbound** broker: scoped `aud`, `td`, revocation, audit
 | Pattern | Upstream proves | Starfly adds | Status |
 |---------|-----------------|--------------|--------|
 | [SPIFFE / SPIRE](#spiffe--spire) | Workload identity (attestation) | WIMSE + policy + kill switch | Shipped |
-| [Kubernetes SA](#kubernetes-service-account) | Pod identity (platform JWT) | Same | Shipped |
+| [Kubernetes SA](#kubernetes-service-account) | Pod identity (platform JWT) | WIMSE + policy + kill switch | Shipped |
 | [Vault OIDC plugin](#vault-oidc-plugin-preview) | External IdP token (Azure, Okta, …) | Optional WIMSE layer | Preview |
-| [Cloud workload identity](#cloud-workload-identity) | AWS / GCP / Azure runtime cred | Same | Shipped |
+| [Cloud workload identity](#cloud-workload-identity) | AWS / GCP / Azure runtime cred | WIMSE + policy + kill switch | Shipped |
 
 ---
 
