@@ -81,7 +81,7 @@ curl -s -X POST http://localhost:8693/v1/exchange/token \
   }' | jq
 ```
 
-In dev mode, any parseable JWT is accepted against the synthetic `dev.local` [trust domain](/docs/docs/getting-started/concepts/trust-domains/).
+In dev mode, any parseable JWT is accepted against the synthetic `dev.local` [trust domain](/docs/concepts/trust-domains/).
 
 ## 6. Read the WIMSE JWT
 
@@ -92,7 +92,7 @@ Pipe `.access_token` through base64 decode on the payload segment, or use the sa
 ./sandbox/run.sh exchange
 ```
 
-Key claims: `sub`, `aud`, `td` (trust domain), `exp`. Deeper dive: [exchange concepts](/docs/docs/getting-started/concepts/exchange/).
+Key claims: `sub`, `aud`, `td` (trust domain), `exp`. Deeper dive: [exchange concepts](/docs/concepts/exchange/).
 
 ## 7. Metrics and live events
 
@@ -101,7 +101,7 @@ curl -s http://localhost:8693/metrics | grep starfly_exchange
 curl -N http://localhost:8693/v1/events
 ```
 
-These same streams power the [operations dashboard](/docs/docs/getting-started/integrators/dashboard/) when deployed.
+These same streams power the [operations dashboard](/docs/integrators/dashboard/) when deployed.
 
 ## 8. Run the proof scripts
 
@@ -119,19 +119,19 @@ Narrated demos:
 ./demos/03-confused-deputy.sh
 ```
 
-Manifest and agent bootstrap: [`sandbox/`](/docs/docs/sandbox/) · [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
+Manifest and agent bootstrap: [`sandbox/`](https://github.com/raygj/project-starfly-fabrics/tree/main/sandbox) · [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
 
 ## What's next
 
 | Goal | Go here |
 |------|---------|
-| Vocabulary | [Glossary](/docs/docs/getting-started/glossary/) |
-| Wire an agent | [Token exchange](/docs/docs/getting-started/integrators/token-exchange/) |
-| MCP tool security | [MCP security](/docs/docs/getting-started/integrators/mcp/) |
-| Multi-protocol tools | [UTC](/docs/docs/getting-started/integrators/utc/) |
+| Vocabulary | [Glossary](/docs/glossary/) |
+| Wire an agent | [Token exchange](/docs/integrators/token-exchange/) |
+| MCP tool security | [MCP security](/docs/integrators/mcp/) |
+| Multi-protocol tools | [UTC](/docs/integrators/utc/) |
 | Playground UI | [starfly.dev/play](https://starfly.dev/play) |
 | API contract | [OpenAPI](https://starfly.dev/api/) |
 
 ## Related
 
-- [Documentation voice](/docs/docs/getting-started/voice/)
+- [Documentation voice](/docs/voice/)

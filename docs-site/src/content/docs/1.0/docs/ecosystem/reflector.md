@@ -32,6 +32,6 @@ eBPF-based SPIFFE identity observation and enforcement for Kubernetes workloads 
 
 ## Related
 
-- [Ecosystem overview](/1.0/docs/ecosystem/)
-- [Operations dashboard](/1.0/docs/integrators/dashboard/)
-- [UTC](/1.0/docs/integrators/utc/)
+- [Ecosystem overview](/1.0/docs/)
+- [Operations dashboard](/1.0/integrators/dashboard/)
+- [UTC](/1.0/integrators/utc/)

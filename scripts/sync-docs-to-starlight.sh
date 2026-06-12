@@ -18,7 +18,7 @@ cp "$DOCS/VOICE.md" "$SITE/src/content/docs/docs/voice.md"
 cp "$DOCS/VOICE.md" "$SITE/src/content/docs/1.0/docs/voice.md"
 rm -rf "$SITE/src/content/docs/docs/screenshots" "$SITE/src/content/docs/1.0/docs/screenshots"
 
-python3 "$SITE/scripts/absolutize-doc-links.py"
+python3 "$SITE/scripts/absolutize-doc-links.py" || exit 1
 
 python3 - "$SITE" <<'PY'
 import re

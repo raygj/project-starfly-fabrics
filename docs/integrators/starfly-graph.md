@@ -62,7 +62,7 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 
 - [ ] NATS JetStream healthy on the fabric unit
 - [ ] `GET /v1/graph/stats` — consumer lag near zero
-- [ ] Kill-switch proof via [sandbox](../../sandbox/run.sh/) — graph optional for that test
+- [ ] Kill-switch proof via [`sandbox/run.sh`](https://github.com/raygj/project-starfly-fabrics/tree/main/sandbox) — graph optional for that test
 
 ## Related
 

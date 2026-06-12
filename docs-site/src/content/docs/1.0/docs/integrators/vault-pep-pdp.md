@@ -6,7 +6,7 @@ slug: 1.0/docs/integrators/vault-pep-pdp
 
 **Stop writing thousands of Sentinel policies per agent.** Vault stays the enforcement point closest to secrets and dynamic credentials; OPA (or your existing policy engine) stays the decision point. One Endpoint Governing Policy, one HTTP call, binary outcome — issue the token or don't.
 
-This is the upstream seam in [credential patterns](/1.0/docs/integrators/credential-patterns/): Vault attests and issues; Starfly mints WIMSE downstream when the fabric needs revocation, audience binding, and federation.
+This is the upstream seam in [credential patterns](/1.0/docs/credential-patterns/): Vault attests and issues; Starfly mints WIMSE downstream when the fabric needs revocation, audience binding, and federation.
 
 ## Why it's worth your time
 
@@ -133,13 +133,13 @@ Agent ──► Vault (Sentinel → OPA) ──► dynamic cred / IdP token
 
 Your in-house token exchange or Starfly can **be** the PDP Vault calls — same team, same Rego, new architecture. Vault becomes the PEP you already operate at scale.
 
-The [OIDC plugin](/1.0/docs/integrators/credential-patterns/#vault-oidc-plugin-preview) adds IdP bridge mode when downstream APIs require Azure/Okta/Google tokens. FIAM preflight runs **before** the IdP request — role-level context gates, analogous to PDP input shaping.
+The [OIDC plugin](/1.0/docs/credential-patterns/#vault-oidc-plugin-preview) adds IdP bridge mode when downstream APIs require Azure/Okta/Google tokens. FIAM preflight runs **before** the IdP request — role-level context gates, analogous to PDP input shaping.
 
 ## Observation feeds policy (autonomic loop)
 
-Behavioral signals — [Reflector](/1.0/docs/ecosystem/reflector/) wire truth, [SSF Relay](/1.0/docs/ecosystem/ssf-relay/) CAEP fan-out, SIEM alerts — feed the PDP as **policy information**, not as enforcement. Discovery → observation → policy refinement → Vault enforces on the next issuance. That is the entitlement development lifecycle without LLM guesswork at the seam.
+Behavioral signals — [Reflector](/1.0/ecosystem/reflector/) wire truth, [SSF Relay](/1.0/ecosystem/ssf-relay/) CAEP fan-out, SIEM alerts — feed the PDP as **policy information**, not as enforcement. Discovery → observation → policy refinement → Vault enforces on the next issuance. That is the entitlement development lifecycle without LLM guesswork at the seam.
 
-[Reasoner](/1.0/docs/ecosystem/reasoner/) answers a different question: does runtime match declared architecture? PDP + Reasoner + graphs share typed evidence when CALM Forge leaf nodes federate with Starfly Graph.
+[Reasoner](/1.0/ecosystem/reasoner/) answers a different question: does runtime match declared architecture? PDP + Reasoner + graphs share typed evidence when CALM Forge leaf nodes federate with Starfly Graph.
 
 ## Operations
 
@@ -166,7 +166,7 @@ Behavioral signals — [Reflector](/1.0/docs/ecosystem/reflector/) wire truth, [
 
 ## Related
 
-- [How the fabric thinks](/1.0/docs/concepts/how-the-fabric-thinks/) — determinism boundary
-- [Credential patterns](/1.0/docs/integrators/credential-patterns/) — full upstream composition
-- [Token exchange](/1.0/docs/integrators/token-exchange/) — Starfly PEP downstream
-- [Ecosystem overview](/1.0/docs/ecosystem/)
+- [How the fabric thinks](/1.0/concepts/how-the-fabric-thinks/) — determinism boundary
+- [Credential patterns](/1.0/docs/credential-patterns/) — full upstream composition
+- [Token exchange](/1.0/docs/token-exchange/) — Starfly PEP downstream
+- [Ecosystem overview](/1.0/ecosystem/)

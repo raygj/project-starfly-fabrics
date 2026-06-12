@@ -119,7 +119,7 @@ Narrated demos:
 ./demos/03-confused-deputy.sh
 ```
 
-Manifest and agent bootstrap: [`sandbox/`](../sandbox/) · [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
+Manifest and agent bootstrap: [`sandbox/`](https://github.com/raygj/project-starfly-fabrics/tree/main/sandbox) · [AGENTS.md](https://github.com/raygj/project-starfly-fabrics/blob/main/AGENTS.md)
 
 ## What's next
 

@@ -30,7 +30,7 @@ Code stub: [`reasoner/`](https://github.com/raygj/project-starfly-fabrics/tree/m
 
 ## Related
 
-- [How the fabric thinks](/1.0/docs/concepts/how-the-fabric-thinks/) — determinism vs probabilism, autonomic loop
-- [CALM Forge](/1.0/docs/ecosystem/calm-forge/)
-- [Starfly Graph](/1.0/docs/integrators/starfly-graph/)
-- [Ecosystem overview](/1.0/docs/ecosystem/)
+- [How the fabric thinks](/1.0/concepts/how-the-fabric-thinks/) — determinism vs probabilism, autonomic loop
+- [CALM Forge](/1.0/docs/calm-forge/)
+- [Starfly Graph](/1.0/integrators/starfly-graph/)
+- [Ecosystem overview](/1.0/docs/)

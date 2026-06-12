@@ -31,7 +31,7 @@ Background work (graph, behavioral profiling, federation relay) runs on **NATS c
 
 The exchange path is optimized for sub-millisecond end-to-end latency in production fabrics. Do not add synchronous dependencies (remote calls, blocking I/O) to this pipeline.
 
-Async integrator surfaces — [dashboard](/1.0/docs/concepts/integrators/dashboard/), [graph](/1.0/docs/concepts/integrators/starfly-graph/), [UTC](/1.0/docs/concepts/integrators/utc/) — sit beside exchange, not in it.
+Async integrator surfaces — [dashboard](/1.0/docs/integrators/dashboard/), [graph](/1.0/docs/integrators/starfly-graph/), [UTC](/1.0/docs/integrators/utc/) — sit beside exchange, not in it.
 
 ## Dev vs production
 
@@ -57,7 +57,7 @@ make build-dev && ./bin/starfly --dev
 ./sandbox/run.sh exchange
 ```
 
-Integrator walkthrough: [token exchange](/1.0/docs/concepts/integrators/token-exchange/).
+Integrator walkthrough: [token exchange](/1.0/docs/integrators/token-exchange/).
 
 ## Code in this repo
 
@@ -68,7 +68,7 @@ Integrator walkthrough: [token exchange](/1.0/docs/concepts/integrators/token-ex
 
 ## Related
 
-- [Getting started](/1.0/docs/concepts/getting-started/)
-- [Trust domains](/1.0/docs/concepts/trust-domains/)
-- [Revocation](/1.0/docs/concepts/revocation/)
-- [Documentation voice](/1.0/docs/concepts/voice/)
+- [Getting started](/1.0/docs/getting-started/)
+- [Trust domains](/1.0/docs/trust-domains/)
+- [Revocation](/1.0/docs/revocation/)
+- [Documentation voice](/1.0/docs/voice/)

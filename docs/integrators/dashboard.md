@@ -22,7 +22,7 @@ description: Watch the fabric in real time — exchange, revocation, federation,
 | **Soul** | Manifest timeline and recovery readiness |
 | **Trust Tree** | Trust domain hierarchy |
 
-Screenshots: [starfly.dev/play](https://starfly.dev/play) · [docs/screenshots/](../../screenshots/)
+Screenshots: [starfly.dev/play](https://starfly.dev/play) — live captures from the lab dashboard
 
 ## How it connects
 

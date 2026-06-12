@@ -30,6 +30,6 @@ Code stub: [`ssf-relay/`](https://github.com/raygj/project-starfly-fabrics/tree/
 
 ## Related
 
-- [Revocation concepts](/1.0/docs/concepts/revocation/)
-- [Ecosystem overview](/1.0/docs/ecosystem/)
+- [Revocation concepts](/1.0/concepts/revocation/)
+- [Ecosystem overview](/1.0/docs/)
 - [OpenAPI — signals](https://starfly.dev/api/operations/tags/signals/)

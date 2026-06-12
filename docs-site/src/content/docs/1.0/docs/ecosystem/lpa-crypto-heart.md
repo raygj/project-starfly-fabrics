@@ -30,6 +30,6 @@ Code stub: [`lpa-crypto-heart/`](https://github.com/raygj/project-starfly-fabric
 
 ## Related
 
-- [Exchange concepts](/1.0/docs/concepts/exchange/) — OPA on the hot path uses loaded bundles
-- [CALM Forge](/1.0/docs/ecosystem/calm-forge/)
-- [Ecosystem overview](/1.0/docs/ecosystem/)
+- [Exchange concepts](/1.0/concepts/exchange/) — OPA on the hot path uses loaded bundles
+- [CALM Forge](/1.0/docs/calm-forge/)
+- [Ecosystem overview](/1.0/docs/)

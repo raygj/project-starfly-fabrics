@@ -56,7 +56,7 @@ Full reference: [OpenAPI — signals](https://starfly.dev/api/operations/tags/si
 
 ## Related
 
-- [Exchange](/1.0/docs/concepts/exchange/)
-- [Glossary: revocation](/1.0/docs/concepts/glossary/#revocation--kill-switch)
-- [Operations dashboard](/1.0/docs/concepts/integrators/dashboard/) — watch CAEP cascade live
-- [Documentation voice](/1.0/docs/concepts/voice/)
+- [Exchange](/1.0/docs/exchange/)
+- [Glossary: revocation](/1.0/docs/glossary/#revocation--kill-switch)
+- [Operations dashboard](/1.0/docs/integrators/dashboard/) — watch CAEP cascade live
+- [Documentation voice](/1.0/docs/voice/)
