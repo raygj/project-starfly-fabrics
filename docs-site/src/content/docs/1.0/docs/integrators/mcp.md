@@ -10,7 +10,7 @@ slug: 1.0/docs/integrators/mcp
 
 - **One check, every MCP call** — verify audience before the tool executes, not after an incident.
 - **Works with your existing exchange flow** — same RFC 8693 endpoint; `audience` must equal the tool's `resource_uri`.
-- **Visible in ops** — denials show on the [MCP Security dashboard tab](dashboard/) and in audit.
+- **Visible in ops** — denials show on the [MCP Security dashboard tab](../dashboard/) and in audit.
 
 ## How it works
 
@@ -22,7 +22,7 @@ Register tool (resource_uri)  →  Exchange with audience = resource_uri  →  W
                               200 match · 403 confused deputy
 ```
 
-For multi-protocol tool servers, add [UTC](utc/) middleware in front of handlers; PEP-side registration and verify stay the same.
+For multi-protocol tool servers, add [UTC](../utc/) middleware in front of handlers; PEP-side registration and verify stay the same.
 
 ## Wire it up
 
@@ -54,7 +54,7 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq -r .access_token
 ```
 
-The `audience` **must** equal the tool's `resource_uri`. See [token exchange](token-exchange/) for credential types and fields.
+The `audience` **must** equal the tool's `resource_uri`. See [token exchange](../token-exchange/) for credential types and fields.
 
 ### 3. Verify on each call
 
@@ -93,7 +93,7 @@ Expected: allow on `code-search`, **403** on `sql-admin` with the same token.
 
 ## Related
 
-- [Token exchange](token-exchange/)
-- [UTC](utc/) — same identity on non-MCP wire shapes
+- [Token exchange](../token-exchange/)
+- [UTC](../utc/) — same identity on non-MCP wire shapes
 - [Glossary: MCP](../glossary/#mcp-model-context-protocol)
 - [Documentation voice](../voice/)

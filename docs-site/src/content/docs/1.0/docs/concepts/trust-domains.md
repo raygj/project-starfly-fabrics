@@ -55,5 +55,5 @@ Watch `td` on the issued JWT — [token exchange integrator guide](../integrator
 ## Related
 
 - [Glossary: trust domain vs audience](../glossary/#audience)
-- [Exchange](exchange/)
+- [Exchange](../exchange/)
 - [Documentation voice](../voice/)

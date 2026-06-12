@@ -69,6 +69,6 @@ Integrator walkthrough: [token exchange](../integrators/token-exchange/).
 ## Related
 
 - [Getting started](../getting-started/)
-- [Trust domains](trust-domains/)
-- [Revocation](revocation/)
+- [Trust domains](../trust-domains/)
+- [Revocation](../revocation/)
 - [Documentation voice](../voice/)

@@ -32,4 +32,4 @@ Same fabric vision, separate repo — design-time graph and intent compilation.
 
 - [Ecosystem overview](../)
 - [Starfly Graph](../../integrators/starfly-graph/)
-- [Reasoner](reasoner/) — consumes federated graph state
+- [Reasoner](../reasoner/) — consumes federated graph state

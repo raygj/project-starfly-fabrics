@@ -48,7 +48,7 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 
 | Surface | Best for |
 |---------|----------|
-| [Operations dashboard](dashboard/) | Human watch — metrics, SSE, topology |
+| [Operations dashboard](../dashboard/) | Human watch — metrics, SSE, topology |
 | **Starfly Graph** | Machine query — lineage, blast radius, shadow agents |
 
 ## Code in this repo
@@ -68,5 +68,5 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 
 - [Ecosystem overview](../ecosystem/) — where Graph sits in the fabric
 - [CALM Forge](../ecosystem/calm-forge/) — design-time graph satellite
-- [UTC](utc/) — multi-protocol tool verification
+- [UTC](../utc/) — multi-protocol tool verification
 - [Documentation voice](../voice/)

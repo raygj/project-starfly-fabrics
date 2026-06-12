@@ -77,7 +77,7 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq
 ```
 
-Pair with [MCP security](mcp/) when `audience` is a tool `resource_uri`.
+Pair with [MCP security](../mcp/) when `audience` is a tool `resource_uri`.
 
 **Code:** [`pkg/identity/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/identity) (Kubernetes validators in production fabrics)
 
@@ -87,7 +87,7 @@ Pair with [MCP security](mcp/) when `audience` is a tool `resource_uri`.
 
 **Why it's worth your time:** You already run a credential vault at scale — use it as the **Policy Enforcement Point** without writing a Sentinel policy per agent. One Endpoint Governing Policy calls OPA (or your engine); Vault issues scoped, short-lived tokens or it does not.
 
-See the full pattern: [Vault as PEP with external PDP](vault-pep-pdp/).
+See the full pattern: [Vault as PEP with external PDP](../vault-pep-pdp/).
 
 ```
 Agent ──► Vault auth ──► Sentinel (one rule) ──► OPA PDP ──► allow / deny
@@ -120,7 +120,7 @@ Workload ──► Vault ──► OIDC plugin ──► IdP access token
 
 **Status:** Preview — plugin lives in operator workspace; public export stub: [`providers/oidc-engine/`](https://github.com/raygj/project-starfly-fabrics/tree/main/providers/oidc-engine).
 
-FIAM signaling (preflight + claim enrichment) sits **before** the IdP request — shaping PDP input on the vault path, same determinism boundary as [Vault PEP → OPA](vault-pep-pdp/).
+FIAM signaling (preflight + claim enrichment) sits **before** the IdP request — shaping PDP input on the vault path, same determinism boundary as [Vault PEP → OPA](../vault-pep-pdp/).
 
 ---
 
@@ -142,14 +142,14 @@ Full enum: [OpenAPI — exchange](https://starfly.dev/api/operations/exchangetok
 
 | Goal | Doc |
 |------|-----|
-| Tool-scoped token | [MCP security](mcp/) |
-| Multi-protocol middleware | [UTC](utc/) |
+| Tool-scoped token | [MCP security](../mcp/) |
+| Multi-protocol middleware | [UTC](../utc/) |
 | Kill compromised cred | [Revocation](../concepts/revocation/) |
 
 ## Related
 
-- [Vault PEP / PDP](vault-pep-pdp/) — Sentinel → OPA at issuance
+- [Vault PEP / PDP](../vault-pep-pdp/) — Sentinel → OPA at issuance
 - [Ecosystem overview](../ecosystem/) — full fabric map
-- [Token exchange](token-exchange/) — wire-up guide
+- [Token exchange](../token-exchange/) — wire-up guide
 - [Glossary: WIMSE JWT](../glossary/#wimse-jwt)
 - [Documentation voice](../voice/)

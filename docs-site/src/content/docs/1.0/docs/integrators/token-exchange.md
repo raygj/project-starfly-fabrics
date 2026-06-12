@@ -108,12 +108,12 @@ Do not use `aud` as a stand-in for trust-domain configuration.
 
 What you pass as `subject_token` depends on the platform — SPIFFE/SPIRE, Kubernetes SA, cloud workload identity, or an IdP bridge. Starfly always outputs WIMSE.
 
-→ [Credential patterns](credential-patterns/)
+→ [Credential patterns](../credential-patterns/)
 
 ## Related
 
-- [Credential patterns](credential-patterns/) — SPIFFE, K8s, Vault OIDC, cloud WI
-- [MCP security](mcp/) — tool-scoped `audience`
+- [Credential patterns](../credential-patterns/) — SPIFFE, K8s, Vault OIDC, cloud WI
+- [MCP security](../mcp/) — tool-scoped `audience`
 - [Exchange concepts](../concepts/exchange/)
 - [Revocation](../concepts/revocation/)
 - [Documentation voice](../voice/)
