@@ -56,7 +56,7 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq
 ```
 
-Trust domains often mirror SPIFFE trust domains (`spiffe://production.example.com`). See [trust domains](../concepts/trust-domains/).
+Trust domains often mirror SPIFFE trust domains (`spiffe://production.example.com`). See [trust domains](../../concepts/trust-domains/).
 
 **Code:** [`pkg/identity/spiffe/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/identity/spiffe)
 
@@ -144,12 +144,12 @@ Full enum: [OpenAPI — exchange](https://starfly.dev/api/operations/exchangetok
 |------|-----|
 | Tool-scoped token | [MCP security](../mcp/) |
 | Multi-protocol middleware | [UTC](../utc/) |
-| Kill compromised cred | [Revocation](../concepts/revocation/) |
+| Kill compromised cred | [Revocation](../../concepts/revocation/) |
 
 ## Related
 
 - [Vault PEP / PDP](../vault-pep-pdp/) — Sentinel → OPA at issuance
-- [Ecosystem overview](../ecosystem/) — full fabric map
+- [Ecosystem overview](../../ecosystem/) — full fabric map
 - [Token exchange](../token-exchange/) — wire-up guide
-- [Glossary: WIMSE JWT](../glossary/#wimse-jwt)
-- [Documentation voice](../voice/)
+- [Glossary: WIMSE JWT](../../glossary/#wimse-jwt)
+- [Documentation voice](../../voice/)

@@ -28,20 +28,20 @@ description: Starfly is the identity PEP — companions sense, remember, relay, 
 | Companion | Why it exists | Status |
 |-----------|---------------|--------|
 | **Starfly** | Exchange, revoke, MCP verify — the fabric core | **Shipped** — [this repo](https://github.com/raygj/project-starfly-fabrics) |
-| [Credential patterns](../integrators/credential-patterns/) | SPIFFE, K8s, Vault, cloud WI feed exchange | Shipped |
-| [CALM Forge](calm-forge/) | Design-time graph — what workloads *should* do | Satellite — [project-calm-forge](https://github.com/raygj/project-calm-forge) |
-| [Starfly Graph](../integrators/starfly-graph/) | Runtime memory — lineage, blast radius | Preview |
-| [Dashboard](../integrators/dashboard/) | Human NOC — metrics, SSE, federation watch | Preview |
-| [Reflector](reflector/) | eBPF senses — observe MCP/tool traffic on the platform | Preview — [workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector) |
-| [SSF Relay](ssf-relay/) | Motor layer — fan CAEP/SET to enterprise sinks | Preview |
-| [Reasoner](reasoner/) | Coherence — design vs runtime drift, shadow agents | Preview |
-| [LPA Crypto Heart](lpa-crypto-heart/) | Signed policy bundles and provenance heartbeats | Preview |
+| [Credential patterns](/docs/docs/ecosystem/integrators/credential-patterns/) | SPIFFE, K8s, Vault, cloud WI feed exchange | Shipped |
+| [CALM Forge](/docs/docs/ecosystem/index/calm-forge/) | Design-time graph — what workloads *should* do | Satellite — [project-calm-forge](https://github.com/raygj/project-calm-forge) |
+| [Starfly Graph](/docs/docs/ecosystem/integrators/starfly-graph/) | Runtime memory — lineage, blast radius | Preview |
+| [Dashboard](/docs/docs/ecosystem/integrators/dashboard/) | Human NOC — metrics, SSE, federation watch | Preview |
+| [Reflector](/docs/docs/ecosystem/index/reflector/) | eBPF senses — observe MCP/tool traffic on the platform | Preview — [workload-ebpf-reflector](https://github.com/raygj/workload-ebpf-reflector) |
+| [SSF Relay](/docs/docs/ecosystem/index/ssf-relay/) | Motor layer — fan CAEP/SET to enterprise sinks | Preview |
+| [Reasoner](/docs/docs/ecosystem/index/reasoner/) | Coherence — design vs runtime drift, shadow agents | Preview |
+| [LPA Crypto Heart](/docs/docs/ecosystem/index/lpa-crypto-heart/) | Signed policy bundles and provenance heartbeats | Preview |
 
 ## Layers (how to think about it)
 
 | Layer | Question it answers | Members |
 |-------|---------------------|---------|
-| **Upstream** | Who attested this workload? | SPIFFE/SPIRE, K8s, Vault OIDC, cloud WI → [credential patterns](../integrators/credential-patterns/) |
+| **Upstream** | Who attested this workload? | SPIFFE/SPIRE, K8s, Vault OIDC, cloud WI → [credential patterns](/docs/docs/ecosystem/integrators/credential-patterns/) |
 | **Core** | What token may leave the fabric? | **Starfly PEP** |
 | **Memory & ops** | What happened? What should have? | Graph, Dashboard, CALM Forge |
 | **Sense & motion** | What does the platform see? Where do signals go? | Reflector, SSF Relay |
@@ -50,12 +50,12 @@ description: Starfly is the identity PEP — companions sense, remember, relay, 
 
 ## Start here
 
-1. [Getting started](../getting-started/) — first WIMSE JWT in 15 minutes  
-2. [How the fabric thinks](../concepts/how-the-fabric-thinks/) — determinism, graphs, autonomic loop  
-3. [Integrators](../integrators/token-exchange/) — wire agents and tools  
+1. [Getting started](/docs/docs/ecosystem/getting-started/) — first WIMSE JWT in 15 minutes  
+2. [How the fabric thinks](/docs/docs/ecosystem/concepts/how-the-fabric-thinks/) — determinism, graphs, autonomic loop  
+3. [Integrators](/docs/docs/ecosystem/integrators/token-exchange/) — wire agents and tools  
 4. Pick **one** companion when you have a concrete need — not all at once  
 
 ## Related
 
-- [Glossary](../glossary/)
-- [Documentation voice](../voice/)
+- [Glossary](/docs/docs/ecosystem/glossary/)
+- [Documentation voice](/docs/docs/ecosystem/voice/)

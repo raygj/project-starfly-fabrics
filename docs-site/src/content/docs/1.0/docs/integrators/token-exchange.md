@@ -80,14 +80,14 @@ curl -s "$STARFLY_URL/v1/identity/jwks" | jq
 
 ## Trust domain vs audience
 
-- **`td`** — inbound trust plane ([trust domains](../concepts/trust-domains/))
+- **`td`** — inbound trust plane ([trust domains](/1.0/docs/concepts/trust-domains/))
 - **`aud`** — outbound target you requested in exchange
 
 Do not use `aud` as a stand-in for trust-domain configuration.
 
 ## Production patterns
 
-**Agent identity** — `POST /v1/identity/agent` issues bootstrap tokens for registered agents. Dev mode accepts stub JWTs; see [getting started](../getting-started/).
+**Agent identity** — `POST /v1/identity/agent` issues bootstrap tokens for registered agents. Dev mode accepts stub JWTs; see [getting started](/1.0/docs/getting-started/).
 
 **Execution-scoped tokens** — bind a token to a specific HTTP action and payload hash via `execution_scope` (~30s TTL). Field definitions in [OpenAPI](https://starfly.dev/api/operations/exchangetoken/).
 
@@ -108,12 +108,12 @@ Do not use `aud` as a stand-in for trust-domain configuration.
 
 What you pass as `subject_token` depends on the platform — SPIFFE/SPIRE, Kubernetes SA, cloud workload identity, or an IdP bridge. Starfly always outputs WIMSE.
 
-→ [Credential patterns](../credential-patterns/)
+→ [Credential patterns](/1.0/docs/integrators/credential-patterns/)
 
 ## Related
 
-- [Credential patterns](../credential-patterns/) — SPIFFE, K8s, Vault OIDC, cloud WI
-- [MCP security](../mcp/) — tool-scoped `audience`
-- [Exchange concepts](../concepts/exchange/)
-- [Revocation](../concepts/revocation/)
-- [Documentation voice](../voice/)
+- [Credential patterns](/1.0/docs/integrators/credential-patterns/) — SPIFFE, K8s, Vault OIDC, cloud WI
+- [MCP security](/1.0/docs/integrators/mcp/) — tool-scoped `audience`
+- [Exchange concepts](/1.0/docs/concepts/exchange/)
+- [Revocation](/1.0/docs/concepts/revocation/)
+- [Documentation voice](/1.0/docs/voice/)

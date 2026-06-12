@@ -2,7 +2,8 @@
   "name": "project-starfly-fabrics",
   "private": true,
   "scripts": {
-    "build": "npm run build --prefix docs-site",
+    "build": "npm run sync-docs && npm run build --prefix docs-site",
+    "sync-docs": "bash scripts/sync-docs-to-starlight.sh",
     "dev:docs": "npm run dev --prefix docs-site",
     "deploy": "npm run build && wrangler deploy",
     "test:go": "go test ./pkg/...",

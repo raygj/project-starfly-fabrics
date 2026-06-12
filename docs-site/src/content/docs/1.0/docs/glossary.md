@@ -10,12 +10,12 @@ slug: 1.0/docs/glossary
 
 | Term | One-line meaning |
 |------|------------------|
-| [Trust domain](#trust-domain) | Inbound identity plane (`td`) |
-| [Audience](#audience) | Outbound target (`aud`) |
-| [Token exchange](#token-exchange) | Credential in → WIMSE JWT out |
-| [Revocation](#revocation--kill-switch) | Immediate deny for compromised IDs |
-| [PEP](#pep-policy-enforcement-point) | Starfly at runtime |
-| [UTC](#utc-universal-tool-calling-layer) | One verifier, many protocols |
+| [Trust domain](/1.0/docs/glossary/#trust-domain) | Inbound identity plane (`td`) |
+| [Audience](/1.0/docs/glossary/#audience) | Outbound target (`aud`) |
+| [Token exchange](/1.0/docs/glossary/#token-exchange) | Credential in → WIMSE JWT out |
+| [Revocation](/1.0/docs/glossary/#revocation--kill-switch) | Immediate deny for compromised IDs |
+| [PEP](/1.0/docs/glossary/#pep-policy-enforcement-point) | Starfly at runtime |
+| [UTC](/1.0/docs/glossary/#utc-universal-tool-calling-layer) | One verifier, many protocols |
 
 ---
 
@@ -28,7 +28,7 @@ The issuer-side identity boundary. Names who Starfly believes issued the inbound
 - Configured in fabric config (dev: synthetic `dev.local`; production: Helm or [Terraform](https://starfly.dev/terraform/)).
 - Appears as the `td` claim on issued WIMSE JWTs.
 
-Deep dive: [trust domains](concepts/trust-domains/).
+Deep dive: [trust domains](/1.0/docs/glossary/concepts/trust-domains/).
 
 ## Audience
 
@@ -38,7 +38,7 @@ The downstream resource a token may reach — API URL, MCP `resource_uri`, or se
 
 - Requested at exchange via the `audience` field (RFC 8693).
 - Appears as the `aud` claim on the issued JWT.
-- MCP binds `aud` to one tool; using it elsewhere is a [confused deputy](integrators/mcp/).
+- MCP binds `aud` to one tool; using it elsewhere is a [confused deputy](/1.0/docs/glossary/integrators/mcp/).
 
 | Term | Question it answers |
 |------|---------------------|
@@ -65,13 +65,13 @@ Starfly is **not** an identity provider. It routes identity: supported credentia
 
 Workload Identity in Multi-System Environments — the issued token profile. Short-lived, audience-bound, signed by Starfly's keys. Verify via `GET /v1/identity/jwks`.
 
-Starfly **issues** WIMSE; SPIFFE SVIDs, K8s tokens, and IdP tokens are common **inputs** to exchange — not alternate WIMSE implementations. See [credential patterns](integrators/credential-patterns/).
+Starfly **issues** WIMSE; SPIFFE SVIDs, K8s tokens, and IdP tokens are common **inputs** to exchange — not alternate WIMSE implementations. See [credential patterns](/1.0/docs/glossary/integrators/credential-patterns/).
 
 ## Token exchange
 
 RFC 8693 at `POST /v1/exchange/token`. Trade a platform credential (K8s SA, OIDC, SPIFFE, stub JWT in dev) for a WIMSE JWT.
 
-Guide: [token exchange integrator](integrators/token-exchange/) · Concepts: [exchange](concepts/exchange/).
+Guide: [token exchange integrator](/1.0/docs/glossary/integrators/token-exchange/) · Concepts: [exchange](/1.0/docs/glossary/concepts/exchange/).
 
 ## Delegation
 
@@ -83,7 +83,7 @@ An agent acting on behalf of another principal. Reflected in delegation depth an
 
 CAEP `session-revoked` and related signals at `POST /v1/signals/events`. Starfly updates a local revocation index and propagates to peers. Target: deny on the exchange path within the documented ~30ms budget.
 
-Concepts: [revocation](concepts/revocation/) · Try: `./sandbox/run.sh revocation`
+Concepts: [revocation](/1.0/docs/glossary/concepts/revocation/) · Try: `./sandbox/run.sh revocation`
 
 ## Federation
 
@@ -99,7 +99,7 @@ Reference: [OpenAPI — signals](https://starfly.dev/api/operations/tags/signals
 
 Tool-calling protocol for AI agents. Starfly registers tools and verifies calls with audience binding.
 
-Guide: [MCP security](integrators/mcp/) · Code: [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp)
+Guide: [MCP security](/1.0/docs/glossary/integrators/mcp/) · Code: [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp)
 
 ## UTC (Universal Tool-Calling Layer)
 
@@ -107,13 +107,13 @@ Guide: [MCP security](integrators/mcp/) · Code: [`pkg/mcp/`](https://github.com
 
 Protocol-agnostic middleware: adapters normalize MCP, HTTP, A2A (and more) into one verification path.
 
-Guide: [UTC](integrators/utc/) · Code: [`pkg/toolcall/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall)
+Guide: [UTC](/1.0/docs/glossary/integrators/utc/) · Code: [`pkg/toolcall/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall)
 
 ## Starfly Graph
 
 Runtime identity knowledge graph — lineage, blast radius, tool history from fabric events. Async NATS consumer; does not block exchange.
 
-Guide: [Starfly Graph](integrators/starfly-graph/)
+Guide: [Starfly Graph](/1.0/docs/glossary/integrators/starfly-graph/)
 
 ## Behavioral profile / Soul
 
@@ -121,5 +121,5 @@ Runtime behavior summary computed asynchronously (not on the exchange hot path).
 
 ## Related
 
-- [Getting started](getting-started/)
-- [Documentation voice](voice/)
+- [Getting started](/1.0/docs/glossary/getting-started/)
+- [Documentation voice](/1.0/docs/glossary/voice/)

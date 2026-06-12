@@ -30,7 +30,7 @@ The most confused pair in NHI work:
 - **Trust domain** — how Starfly validated the SA (cluster trust, namespace, name).
 - **Audience** — the analytics API; the only downstream resource this JWT targets.
 
-A token with `aud` for tool A must not work at tool B — even when both tools sit in the same trust domain. That is the confused-deputy fix in [MCP security](../integrators/mcp/).
+A token with `aud` for tool A must not work at tool B — even when both tools sit in the same trust domain. That is the confused-deputy fix in [MCP security](/1.0/docs/concepts/integrators/mcp/).
 
 ## Dev mode
 
@@ -38,7 +38,7 @@ A token with `aud` for tool A must not work at tool B — even when both tools s
 ./bin/starfly --dev
 ```
 
-Uses synthetic `dev.local`. Stub JWTs in [getting started](../getting-started/) exercise exchange without a real IdP.
+Uses synthetic `dev.local`. Stub JWTs in [getting started](/1.0/docs/concepts/getting-started/) exercise exchange without a real IdP.
 
 ## Production configuration
 
@@ -50,10 +50,10 @@ Declare trust domains in fabric configuration (Helm values or [Terraform provide
 ./sandbox/run.sh exchange
 ```
 
-Watch `td` on the issued JWT — [token exchange integrator guide](../integrators/token-exchange/).
+Watch `td` on the issued JWT — [token exchange integrator guide](/1.0/docs/concepts/integrators/token-exchange/).
 
 ## Related
 
-- [Glossary: trust domain vs audience](../glossary/#audience)
-- [Exchange](../exchange/)
-- [Documentation voice](../voice/)
+- [Glossary: trust domain vs audience](/1.0/docs/concepts/glossary/#audience)
+- [Exchange](/1.0/docs/concepts/exchange/)
+- [Documentation voice](/1.0/docs/concepts/voice/)

@@ -73,5 +73,5 @@ curl -s "$TOOL_URL/api/search?q=starfly" \
 ## Related
 
 - [MCP security](../mcp/) — register and verify on the PEP
-- [Exchange](../concepts/exchange/) · [Revocation](../concepts/revocation/) — fabric invariants
-- [Documentation voice](../voice/) — how these pages are written
+- [Exchange](../../concepts/exchange/) · [Revocation](../../concepts/revocation/) — fabric invariants
+- [Documentation voice](../../voice/) — how these pages are written

@@ -79,14 +79,14 @@ curl -s "$STARFLY_URL/v1/identity/jwks" | jq
 
 ## Trust domain vs audience
 
-- **`td`** — inbound trust plane ([trust domains](../concepts/trust-domains/))
+- **`td`** — inbound trust plane ([trust domains](../../concepts/trust-domains/))
 - **`aud`** — outbound target you requested in exchange
 
 Do not use `aud` as a stand-in for trust-domain configuration.
 
 ## Production patterns
 
-**Agent identity** — `POST /v1/identity/agent` issues bootstrap tokens for registered agents. Dev mode accepts stub JWTs; see [getting started](../getting-started/).
+**Agent identity** — `POST /v1/identity/agent` issues bootstrap tokens for registered agents. Dev mode accepts stub JWTs; see [getting started](../../getting-started/).
 
 **Execution-scoped tokens** — bind a token to a specific HTTP action and payload hash via `execution_scope` (~30s TTL). Field definitions in [OpenAPI](https://starfly.dev/api/operations/exchangetoken/).
 
@@ -113,6 +113,6 @@ What you pass as `subject_token` depends on the platform — SPIFFE/SPIRE, Kuber
 
 - [Credential patterns](../credential-patterns/) — SPIFFE, K8s, Vault OIDC, cloud WI
 - [MCP security](../mcp/) — tool-scoped `audience`
-- [Exchange concepts](../concepts/exchange/)
-- [Revocation](../concepts/revocation/)
-- [Documentation voice](../voice/)
+- [Exchange concepts](../../concepts/exchange/)
+- [Revocation](../../concepts/revocation/)
+- [Documentation voice](../../voice/)

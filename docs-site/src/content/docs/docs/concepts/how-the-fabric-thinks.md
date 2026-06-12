@@ -22,12 +22,12 @@ Design-time and runtime each own their leaf nodes:
 
 | Graph | When | Leaf nodes (examples) |
 |-------|------|------------------------|
-| [CALM Forge](../ecosystem/calm-forge/) | Intent declared | `Workload`, `Capability`, `TrustDomain`, `Placement` |
-| [Starfly Graph](../integrators/starfly-graph/) | Fabric observed | `Agent`, `Exchange`, `ToolCall`, `Delegation` |
+| [CALM Forge](/docs/docs/concepts/ecosystem/calm-forge/) | Intent declared | `Workload`, `Capability`, `TrustDomain`, `Placement` |
+| [Starfly Graph](/docs/docs/concepts/integrators/starfly-graph/) | Fabric observed | `Agent`, `Exchange`, `ToolCall`, `Delegation` |
 
 Shared types (`Capability`, `Source`, `TrustDomain`) are the vocabulary. The `manifests_as` relationship is **computed at query time** when graphs federate — not stored twice, not LLM-inferred.
 
-[Reasoner](../ecosystem/reasoner/) sits on that seam: *does what happened match what was declared?*
+[Reasoner](/docs/docs/concepts/ecosystem/reasoner/) sits on that seam: *does what happened match what was declared?*
 
 ## Three PEPs, one policy muscle
 
@@ -47,9 +47,9 @@ Workload ──► Vault PEP (Sentinel → OPA) ──► secret / IdP token
 
 Each PEP fails closed when its PDP is unreachable. None of them call an LLM.
 
-Vault implements this with **one Sentinel rule** and an HTTP call to OPA — not thousands of per-agent policies. Guardrails (TTL ceiling, delegation depth cap, scope monotonicity) stay in Sentinel as absolute boundaries; intent and context live in Rego. See [Vault as PEP with external PDP](../integrators/vault-pep-pdp/).
+Vault implements this with **one Sentinel rule** and an HTTP call to OPA — not thousands of per-agent policies. Guardrails (TTL ceiling, delegation depth cap, scope monotonicity) stay in Sentinel as absolute boundaries; intent and context live in Rego. See [Vault as PEP with external PDP](/docs/docs/concepts/integrators/vault-pep-pdp/).
 
-See [Credential patterns](../integrators/credential-patterns/) for the full upstream composition with Starfly.
+See [Credential patterns](/docs/docs/concepts/integrators/credential-patterns/) for the full upstream composition with Starfly.
 
 ## The autonomic loop
 
@@ -69,13 +69,13 @@ When drift clears threshold, a structured **change proposal** re-enters CALM aut
 
 ## What Starfly alone guarantees
 
-You can deploy only Starfly and get a correct PEP: exchange, revocation, MCP verify. The autonomic arc completes when you add satellites — [CALM Forge](../ecosystem/calm-forge/) for intent, [Reasoner](../ecosystem/reasoner/) for coherence, [Reflector](../ecosystem/reflector/) for wire truth — all **async**, none on the exchange or revocation hot paths.
+You can deploy only Starfly and get a correct PEP: exchange, revocation, MCP verify. The autonomic arc completes when you add satellites — [CALM Forge](/docs/docs/concepts/ecosystem/calm-forge/) for intent, [Reasoner](/docs/docs/concepts/ecosystem/reasoner/) for coherence, [Reflector](/docs/docs/concepts/ecosystem/reflector/) for wire truth — all **async**, none on the exchange or revocation hot paths.
 
 **Starfly alone is enough.** The full loop is optional depth for teams ready to close intent → enforcement → reconciliation.
 
 ## Related
 
-- [Ecosystem overview](../ecosystem/) — fabric map
-- [Reasoner](../ecosystem/reasoner/) — coherence engine
-- [CALM Forge](../ecosystem/calm-forge/) — design-time graph satellite
-- [Documentation voice](../voice/) — how we write for integrators
+- [Ecosystem overview](/docs/docs/concepts/ecosystem/) — fabric map
+- [Reasoner](/docs/docs/concepts/ecosystem/reasoner/) — coherence engine
+- [CALM Forge](/docs/docs/concepts/ecosystem/calm-forge/) — design-time graph satellite
+- [Documentation voice](/docs/docs/concepts/voice/) — how we write for integrators

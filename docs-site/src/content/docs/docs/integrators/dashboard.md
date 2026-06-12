@@ -22,7 +22,7 @@ description: Watch the fabric in real time — exchange, revocation, federation,
 | **Soul** | Manifest timeline and recovery readiness |
 | **Trust Tree** | Trust domain hierarchy |
 
-Screenshots: [starfly.dev/play](https://starfly.dev/play) · [docs/screenshots/](../screenshots/)
+Screenshots: [starfly.dev/play](https://starfly.dev/play) · [docs/screenshots/](/docs/docs/screenshots/)
 
 ## How it connects
 
@@ -39,7 +39,7 @@ No writes to the PEP. Revocation and federation actions still go through signals
 |------|-----|
 | Watch a demo or incident | Dashboard Pulse + SSE |
 | Scriptable health check | `curl $STARFLY_URL/v1/sys/health` |
-| Agent integration | [Token exchange](../token-exchange/), [UTC](../utc/) |
+| Agent integration | [Token exchange](/docs/docs/integrators/token-exchange/), [UTC](/docs/docs/integrators/utc/) |
 
 ## Code in this repo
 
@@ -51,6 +51,6 @@ Deploy with Helm (`dashboard.enabled=true`) when the app slice is published here
 
 ## Related
 
-- [UTC](../utc/) · [Starfly Graph](../starfly-graph/) — other async integrator surfaces
-- [Getting started](../getting-started/) — stand up a fabric unit first
-- [Documentation voice](../voice/)
+- [UTC](/docs/docs/integrators/utc/) · [Starfly Graph](/docs/docs/integrators/starfly-graph/) — other async integrator surfaces
+- [Getting started](/docs/docs/getting-started/) — stand up a fabric unit first
+- [Documentation voice](/docs/docs/voice/)

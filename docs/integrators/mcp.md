@@ -73,7 +73,7 @@ curl -s -X POST "$STARFLY_URL/v1/mcp/verify" \
 
 ### 4. Revoke when compromised
 
-Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation](../concepts/revocation/).
+Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation](../../concepts/revocation/).
 
 ## Prove it in the sandbox
 
@@ -94,5 +94,5 @@ Expected: allow on `code-search`, **403** on `sql-admin` with the same token.
 
 - [Token exchange](../token-exchange/)
 - [UTC](../utc/) — same identity on non-MCP wire shapes
-- [Glossary: MCP](../glossary/#mcp-model-context-protocol)
-- [Documentation voice](../voice/)
+- [Glossary: MCP](../../glossary/#mcp-model-context-protocol)
+- [Documentation voice](../../voice/)

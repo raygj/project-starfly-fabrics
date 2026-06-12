@@ -22,7 +22,7 @@ description: Watch the fabric in real time — exchange, revocation, federation,
 | **Soul** | Manifest timeline and recovery readiness |
 | **Trust Tree** | Trust domain hierarchy |
 
-Screenshots: [starfly.dev/play](https://starfly.dev/play) · [docs/screenshots/](../screenshots/)
+Screenshots: [starfly.dev/play](https://starfly.dev/play) · [docs/screenshots/](../../screenshots/)
 
 ## How it connects
 
@@ -52,5 +52,5 @@ Deploy with Helm (`dashboard.enabled=true`) when the app slice is published here
 ## Related
 
 - [UTC](../utc/) · [Starfly Graph](../starfly-graph/) — other async integrator surfaces
-- [Getting started](../getting-started/) — stand up a fabric unit first
-- [Documentation voice](../voice/)
+- [Getting started](../../getting-started/) — stand up a fabric unit first
+- [Documentation voice](../../voice/)

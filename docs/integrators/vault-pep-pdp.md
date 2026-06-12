@@ -136,9 +136,9 @@ The [OIDC plugin](../credential-patterns/#vault-oidc-plugin-preview) adds IdP br
 
 ## Observation feeds policy (autonomic loop)
 
-Behavioral signals — [Reflector](../ecosystem/reflector/) wire truth, [SSF Relay](../ecosystem/ssf-relay/) CAEP fan-out, SIEM alerts — feed the PDP as **policy information**, not as enforcement. Discovery → observation → policy refinement → Vault enforces on the next issuance. That is the entitlement development lifecycle without LLM guesswork at the seam.
+Behavioral signals — [Reflector](../../ecosystem/reflector/) wire truth, [SSF Relay](../../ecosystem/ssf-relay/) CAEP fan-out, SIEM alerts — feed the PDP as **policy information**, not as enforcement. Discovery → observation → policy refinement → Vault enforces on the next issuance. That is the entitlement development lifecycle without LLM guesswork at the seam.
 
-[Reasoner](../ecosystem/reasoner/) answers a different question: does runtime match declared architecture? PDP + Reasoner + graphs share typed evidence when CALM Forge leaf nodes federate with Starfly Graph.
+[Reasoner](../../ecosystem/reasoner/) answers a different question: does runtime match declared architecture? PDP + Reasoner + graphs share typed evidence when CALM Forge leaf nodes federate with Starfly Graph.
 
 ## Operations
 
@@ -165,7 +165,7 @@ Behavioral signals — [Reflector](../ecosystem/reflector/) wire truth, [SSF Rel
 
 ## Related
 
-- [How the fabric thinks](../concepts/how-the-fabric-thinks/) — determinism boundary
+- [How the fabric thinks](../../concepts/how-the-fabric-thinks/) — determinism boundary
 - [Credential patterns](../credential-patterns/) — full upstream composition
 - [Token exchange](../token-exchange/) — Starfly PEP downstream
-- [Ecosystem overview](../ecosystem/)
+- [Ecosystem overview](../../ecosystem/)
