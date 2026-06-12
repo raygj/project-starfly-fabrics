@@ -52,6 +52,7 @@ export default defineConfig({
 					label: 'Explanation',
 					items: [
 						{ label: 'Glossary', slug: 'docs/glossary' },
+						{ label: 'Documentation voice', slug: 'docs/voice' },
 						{ label: 'How the fabric thinks', slug: 'docs/concepts/how-the-fabric-thinks' },
 						{ label: 'Trust domains', slug: 'docs/concepts/trust-domains' },
 						{ label: 'Exchange', slug: 'docs/concepts/exchange' },

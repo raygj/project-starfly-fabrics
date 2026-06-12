@@ -25,6 +25,10 @@
           "slug": "docs/glossary"
         },
         {
+          "label": "Documentation voice",
+          "slug": "docs/voice"
+        },
+        {
           "label": "How the fabric thinks",
           "slug": "docs/concepts/how-the-fabric-thinks"
         },

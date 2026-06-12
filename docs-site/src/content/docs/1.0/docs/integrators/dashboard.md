@@ -40,7 +40,7 @@ No writes to the PEP. Revocation and federation actions still go through signals
 |------|-----|
 | Watch a demo or incident | Dashboard Pulse + SSE |
 | Scriptable health check | `curl $STARFLY_URL/v1/sys/health` |
-| Agent integration | [Token exchange](token-exchange.md), [UTC](utc.md) |
+| Agent integration | [Token exchange](token-exchange/), [UTC](utc/) |
 
 ## Code in this repo
 
@@ -52,6 +52,6 @@ Deploy with Helm (`dashboard.enabled=true`) when the app slice is published here
 
 ## Related
 
-- [UTC](utc.md) · [Starfly Graph](starfly-graph.md) — other async integrator surfaces
-- [Getting started](../getting-started.md) — stand up a fabric unit first
-- [Documentation voice](../VOICE.md)
+- [UTC](utc/) · [Starfly Graph](starfly-graph/) — other async integrator surfaces
+- [Getting started](../getting-started/) — stand up a fabric unit first
+- [Documentation voice](../voice/)

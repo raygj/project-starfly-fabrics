@@ -27,7 +27,7 @@ The issuer-side identity boundary. Names who Starfly believes issued the inbound
 - Configured in fabric config (dev: synthetic `dev.local`; production: Helm or [Terraform](https://starfly.dev/terraform/)).
 - Appears as the `td` claim on issued WIMSE JWTs.
 
-Deep dive: [trust domains](concepts/trust-domains.md).
+Deep dive: [trust domains](concepts/trust-domains/).
 
 ## Audience
 
@@ -37,7 +37,7 @@ The downstream resource a token may reach — API URL, MCP `resource_uri`, or se
 
 - Requested at exchange via the `audience` field (RFC 8693).
 - Appears as the `aud` claim on the issued JWT.
-- MCP binds `aud` to one tool; using it elsewhere is a [confused deputy](integrators/mcp.md).
+- MCP binds `aud` to one tool; using it elsewhere is a [confused deputy](integrators/mcp/).
 
 | Term | Question it answers |
 |------|---------------------|
@@ -64,13 +64,13 @@ Starfly is **not** an identity provider. It routes identity: supported credentia
 
 Workload Identity in Multi-System Environments — the issued token profile. Short-lived, audience-bound, signed by Starfly's keys. Verify via `GET /v1/identity/jwks`.
 
-Starfly **issues** WIMSE; SPIFFE SVIDs, K8s tokens, and IdP tokens are common **inputs** to exchange — not alternate WIMSE implementations. See [credential patterns](integrators/credential-patterns.md).
+Starfly **issues** WIMSE; SPIFFE SVIDs, K8s tokens, and IdP tokens are common **inputs** to exchange — not alternate WIMSE implementations. See [credential patterns](integrators/credential-patterns/).
 
 ## Token exchange
 
 RFC 8693 at `POST /v1/exchange/token`. Trade a platform credential (K8s SA, OIDC, SPIFFE, stub JWT in dev) for a WIMSE JWT.
 
-Guide: [token exchange integrator](integrators/token-exchange.md) · Concepts: [exchange](concepts/exchange.md).
+Guide: [token exchange integrator](integrators/token-exchange/) · Concepts: [exchange](concepts/exchange/).
 
 ## Delegation
 
@@ -82,7 +82,7 @@ An agent acting on behalf of another principal. Reflected in delegation depth an
 
 CAEP `session-revoked` and related signals at `POST /v1/signals/events`. Starfly updates a local revocation index and propagates to peers. Target: deny on the exchange path within the documented ~30ms budget.
 
-Concepts: [revocation](concepts/revocation.md) · Try: `./sandbox/run.sh revocation`
+Concepts: [revocation](concepts/revocation/) · Try: `./sandbox/run.sh revocation`
 
 ## Federation
 
@@ -98,7 +98,7 @@ Reference: [OpenAPI — signals](https://starfly.dev/api/operations/tags/signals
 
 Tool-calling protocol for AI agents. Starfly registers tools and verifies calls with audience binding.
 
-Guide: [MCP security](integrators/mcp.md) · Code: [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp)
+Guide: [MCP security](integrators/mcp/) · Code: [`pkg/mcp/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/mcp)
 
 ## UTC (Universal Tool-Calling Layer)
 
@@ -106,13 +106,13 @@ Guide: [MCP security](integrators/mcp.md) · Code: [`pkg/mcp/`](https://github.c
 
 Protocol-agnostic middleware: adapters normalize MCP, HTTP, A2A (and more) into one verification path.
 
-Guide: [UTC](integrators/utc.md) · Code: [`pkg/toolcall/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall)
+Guide: [UTC](integrators/utc/) · Code: [`pkg/toolcall/`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall)
 
 ## Starfly Graph
 
 Runtime identity knowledge graph — lineage, blast radius, tool history from fabric events. Async NATS consumer; does not block exchange.
 
-Guide: [Starfly Graph](integrators/starfly-graph.md)
+Guide: [Starfly Graph](integrators/starfly-graph/)
 
 ## Behavioral profile / Soul
 
@@ -120,5 +120,5 @@ Runtime behavior summary computed asynchronously (not on the exchange hot path).
 
 ## Related
 
-- [Getting started](getting-started.md)
-- [Documentation voice](VOICE.md)
+- [Getting started](getting-started/)
+- [Documentation voice](voice/)

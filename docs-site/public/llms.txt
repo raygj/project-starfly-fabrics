@@ -25,6 +25,7 @@
 
 - /1.0/docs/getting-started/ — first WIMSE JWT in 15 minutes
 - /1.0/docs/glossary/ — trust domain vs audience, full vocabulary
+- /1.0/docs/voice/ — editorial lane (determinism, badges, link rules)
 - /1.0/docs/concepts/how-the-fabric-thinks/ — determinism vs probabilism, autonomic loop, graph seam
 - /1.0/docs/ecosystem/ — fabric map (Starfly PEP + optional companions)
 - /1.0/docs/ecosystem/calm-forge/ — design-time graph (Satellite; github.com/raygj/project-calm-forge)

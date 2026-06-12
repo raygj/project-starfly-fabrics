@@ -35,8 +35,8 @@ Register tools with optional **protocol scope** — an MCP-only tool returns **4
 
 ## Wire it up
 
-1. Exchange a platform credential for a WIMSE JWT — [token exchange](token-exchange.md).
-2. Register the tool on the PEP (resource URI + allowed protocols) — [MCP security](mcp.md) covers PEP-side registration.
+1. Exchange a platform credential for a WIMSE JWT — [token exchange](token-exchange/).
+2. Register the tool on the PEP (resource URI + allowed protocols) — [MCP security](mcp/) covers PEP-side registration.
 3. Mount UTC middleware on your tool server — [`pkg/toolcall`](https://github.com/raygj/project-starfly-fabrics/tree/main/pkg/toolcall).
 4. Point JWKS resolution at `GET /v1/identity/jwks` on your fabric unit.
 
@@ -73,6 +73,6 @@ curl -s "$TOOL_URL/api/search?q=starfly" \
 
 ## Related
 
-- [MCP security](mcp.md) — register and verify on the PEP
-- [Exchange](../concepts/exchange.md) · [Revocation](../concepts/revocation.md) — fabric invariants
-- [Documentation voice](../VOICE.md) — how these pages are written
+- [MCP security](mcp/) — register and verify on the PEP
+- [Exchange](../concepts/exchange/) · [Revocation](../concepts/revocation/) — fabric invariants
+- [Documentation voice](../voice/) — how these pages are written

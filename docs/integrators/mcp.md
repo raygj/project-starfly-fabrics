@@ -9,7 +9,7 @@ description: Stop the confused deputy — bind every MCP tool call to the right 
 
 - **One check, every MCP call** — verify audience before the tool executes, not after an incident.
 - **Works with your existing exchange flow** — same RFC 8693 endpoint; `audience` must equal the tool's `resource_uri`.
-- **Visible in ops** — denials show on the [MCP Security dashboard tab](dashboard.md) and in audit.
+- **Visible in ops** — denials show on the [MCP Security dashboard tab](dashboard/) and in audit.
 
 ## How it works
 
@@ -21,7 +21,7 @@ Register tool (resource_uri)  →  Exchange with audience = resource_uri  →  W
                               200 match · 403 confused deputy
 ```
 
-For multi-protocol tool servers, add [UTC](utc.md) middleware in front of handlers; PEP-side registration and verify stay the same.
+For multi-protocol tool servers, add [UTC](utc/) middleware in front of handlers; PEP-side registration and verify stay the same.
 
 ## Wire it up
 
@@ -53,7 +53,7 @@ curl -s -X POST "$STARFLY_URL/v1/exchange/token" \
   }' | jq -r .access_token
 ```
 
-The `audience` **must** equal the tool's `resource_uri`. See [token exchange](token-exchange.md) for credential types and fields.
+The `audience` **must** equal the tool's `resource_uri`. See [token exchange](token-exchange/) for credential types and fields.
 
 ### 3. Verify on each call
 
@@ -73,7 +73,7 @@ curl -s -X POST "$STARFLY_URL/v1/mcp/verify" \
 
 ### 4. Revoke when compromised
 
-Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation](../concepts/revocation.md).
+Send CAEP `session-revoked` or tool-specific signals via `POST /v1/signals/events`. See [revocation](../concepts/revocation/).
 
 ## Prove it in the sandbox
 
@@ -92,7 +92,7 @@ Expected: allow on `code-search`, **403** on `sql-admin` with the same token.
 
 ## Related
 
-- [Token exchange](token-exchange.md)
-- [UTC](utc.md) — same identity on non-MCP wire shapes
-- [Glossary: MCP](../glossary.md#mcp-model-context-protocol)
-- [Documentation voice](../VOICE.md)
+- [Token exchange](token-exchange/)
+- [UTC](utc/) — same identity on non-MCP wire shapes
+- [Glossary: MCP](../glossary/#mcp-model-context-protocol)
+- [Documentation voice](../voice/)

@@ -49,7 +49,7 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 
 | Surface | Best for |
 |---------|----------|
-| [Operations dashboard](dashboard.md) | Human watch — metrics, SSE, topology |
+| [Operations dashboard](dashboard/) | Human watch — metrics, SSE, topology |
 | **Starfly Graph** | Machine query — lineage, blast radius, shadow agents |
 
 ## Code in this repo
@@ -63,11 +63,11 @@ Runtime graph (Starfly) pairs with the design-time graph in [CALM Forge](https:/
 
 - [ ] NATS JetStream healthy on the fabric unit
 - [ ] `GET /v1/graph/stats` — consumer lag near zero
-- [ ] Kill-switch proof via [sandbox](../../sandbox/run.sh) — graph optional for that test
+- [ ] Kill-switch proof via [sandbox](../../sandbox/run.sh/) — graph optional for that test
 
 ## Related
 
-- [Ecosystem overview](../ecosystem/index.md) — where Graph sits in the fabric
-- [CALM Forge](../ecosystem/calm-forge.md) — design-time graph satellite
-- [UTC](utc.md) — multi-protocol tool verification
-- [Documentation voice](../VOICE.md)
+- [Ecosystem overview](../ecosystem/) — where Graph sits in the fabric
+- [CALM Forge](../ecosystem/calm-forge/) — design-time graph satellite
+- [UTC](utc/) — multi-protocol tool verification
+- [Documentation voice](../voice/)

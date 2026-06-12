@@ -82,7 +82,7 @@ curl -s -X POST http://localhost:8693/v1/exchange/token \
   }' | jq
 ```
 
-In dev mode, any parseable JWT is accepted against the synthetic `dev.local` [trust domain](concepts/trust-domains.md).
+In dev mode, any parseable JWT is accepted against the synthetic `dev.local` [trust domain](concepts/trust-domains/).
 
 ## 6. Read the WIMSE JWT
 
@@ -93,7 +93,7 @@ Pipe `.access_token` through base64 decode on the payload segment, or use the sa
 ./sandbox/run.sh exchange
 ```
 
-Key claims: `sub`, `aud`, `td` (trust domain), `exp`. Deeper dive: [exchange concepts](concepts/exchange.md).
+Key claims: `sub`, `aud`, `td` (trust domain), `exp`. Deeper dive: [exchange concepts](concepts/exchange/).
 
 ## 7. Metrics and live events
 
@@ -102,7 +102,7 @@ curl -s http://localhost:8693/metrics | grep starfly_exchange
 curl -N http://localhost:8693/v1/events
 ```
 
-These same streams power the [operations dashboard](integrators/dashboard.md) when deployed.
+These same streams power the [operations dashboard](integrators/dashboard/) when deployed.
 
 ## 8. Run the proof scripts
 
@@ -126,13 +126,13 @@ Manifest and agent bootstrap: [`sandbox/`](../sandbox/) · [AGENTS.md](https://g
 
 | Goal | Go here |
 |------|---------|
-| Vocabulary | [Glossary](glossary.md) |
-| Wire an agent | [Token exchange](integrators/token-exchange.md) |
-| MCP tool security | [MCP security](integrators/mcp.md) |
-| Multi-protocol tools | [UTC](integrators/utc.md) |
+| Vocabulary | [Glossary](glossary/) |
+| Wire an agent | [Token exchange](integrators/token-exchange/) |
+| MCP tool security | [MCP security](integrators/mcp/) |
+| Multi-protocol tools | [UTC](integrators/utc/) |
 | Playground UI | [starfly.dev/play](https://starfly.dev/play) |
 | API contract | [OpenAPI](https://starfly.dev/api/) |
 
 ## Related
 
-- [Documentation voice](VOICE.md)
+- [Documentation voice](voice/)
